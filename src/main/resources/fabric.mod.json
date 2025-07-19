@@ -29,6 +29,12 @@
 		],
 		"recipesReady": [
 			"com.pasithea0.betterthanrain.BetterThanRainMod"
+		],
+		"beforeClientStart": [
+			"com.pasithea0.betterthanrain.BetterThanRainMod"
+		],
+		"afterClientStart": [
+			"com.pasithea0.betterthanrain.BetterThanRainMod"
 		]
 	},
   "mixins": [

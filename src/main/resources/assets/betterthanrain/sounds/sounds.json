@@ -1,0 +1,141 @@
+{
+  "test": {
+    "subtitle": "subtitles.btr.test",
+    "sounds": [
+      "test.ogg"
+    ]
+  },
+  "rain_sounds_metal": {
+    "subtitle": "subtitles.btr.rain_sounds_metal",
+    "sounds": [
+      "rain_sounds_metal_1.ogg",
+      "rain_sounds_metal_2.ogg",
+      "rain_sounds_metal_3.ogg",
+      "rain_sounds_metal_4.ogg",
+      "rain_sounds_metal_5.ogg",
+      "rain_sounds_metal_7.ogg",
+      "rain_sounds_metal_8.ogg",
+      "rain_sounds_metal_9.ogg"
+    ]
+  },
+  "rain_sounds_metal_muffled": {
+    "subtitle": "subtitles.btr.rain_sounds_metal_muffled",
+    "sounds": [
+      "rain_sounds_metal_muffled_1.ogg",
+      "rain_sounds_metal_muffled_2.ogg",
+      "rain_sounds_metal_muffled_3.ogg"
+    ]
+  },
+  "rain_sounds_fabric": {
+    "subtitle": "subtitles.btr.rain_sounds_fabric",
+    "sounds": [
+      "rain_sounds_fabric_1.ogg",
+      "rain_sounds_fabric_6.ogg"
+    ]
+  },
+  "rain_sounds_fabric_muffled": {
+    "subtitle": "subtitles.btr.rain_sounds_fabric_muffled",
+    "sounds": [
+      "rain_sounds_fabric_muffled_1.ogg",
+      "rain_sounds_fabric_muffled_2.ogg",
+      "rain_sounds_fabric_muffled_3.ogg",
+      "rain_sounds_fabric_muffled_4.ogg",
+      "rain_sounds_fabric_muffled_5.ogg",
+      "rain_sounds_fabric_muffled_6.ogg"
+    ]
+  },
+  "rain_sounds_glass": {
+    "subtitle": "subtitles.btr.rain_sounds_glass",
+    "sounds": [
+      "rain_sounds_glass_1.ogg",
+      "rain_sounds_glass_2.ogg",
+      "rain_sounds_glass_3.ogg",
+      "rain_sounds_glass_4.ogg",
+      "rain_sounds_glass_5.ogg",
+      "rain_sounds_glass_6.ogg"
+    ]
+  },
+  "rain_sounds_glass_muffled": {
+    "subtitle": "subtitles.btr.rain_sounds_glass_muffled",
+    "sounds": [
+      "rain_sounds_glass_muffled_1.ogg",
+      "rain_sounds_glass_muffled_2.ogg",
+      "rain_sounds_glass_muffled_3.ogg",
+      "rain_sounds_glass_muffled_4.ogg",
+      "rain_sounds_glass_muffled_5.ogg",
+      "rain_sounds_glass_muffled_6.ogg"
+    ]
+  },
+  "rain_sounds_foliage": {
+    "subtitle": "subtitles.btr.rain_sounds_foliage",
+    "sounds": [
+      "rain_sounds_foliage_1.ogg",
+      "rain_sounds_foliage_2.ogg",
+      "rain_sounds_foliage_3.ogg",
+      "rain_sounds_foliage_4.ogg",
+      "rain_sounds_foliage_5.ogg",
+      "rain_sounds_foliage_6.ogg"
+    ]
+  },
+  "rain_sounds_water": {
+    "subtitle": "subtitles.btr.rain_sounds_water",
+    "sounds": [
+      "rain_sounds_water_1.ogg",
+      "rain_sounds_water_2.ogg",
+      "rain_sounds_water_3.ogg",
+      "rain_sounds_water_4.ogg",
+      "rain_sounds_water_5.ogg",
+      "rain_sounds_water_6.ogg"
+    ]
+  },
+  "rain_sounds_amethyst": {
+    "subtitle": "subtitles.btr.rain_sounds_amethyst",
+    "sounds": [
+      "rain_sounds_amethyst_1.ogg",
+      "rain_sounds_amethyst_2.ogg",
+      "rain_sounds_amethyst_3.ogg",
+      "rain_sounds_amethyst_4.ogg",
+      "rain_sounds_amethyst_5.ogg",
+      "rain_sounds_amethyst_6.ogg",
+      "rain_sounds_amethyst_7.ogg"
+    ]
+  },
+  "rain_sounds_noteblock": {
+    "subtitle": "subtitles.btr.rain_sounds_noteblock",
+    "sounds": [
+      "rain_sounds_noteblock_1.ogg",
+      "rain_sounds_noteblock_2.ogg",
+      "rain_sounds_noteblock_3.ogg",
+      "rain_sounds_noteblock_4.ogg",
+      "rain_sounds_noteblock_5.ogg",
+      "rain_sounds_noteblock_6.ogg",
+      "rain_sounds_noteblock_7.ogg",
+      "rain_sounds_noteblock_8.ogg",
+      "rain_sounds_noteblock_9.ogg",
+      "rain_sounds_noteblock_10.ogg",
+      "rain_sounds_noteblock_11.ogg",
+      "rain_sounds_noteblock_12.ogg",
+      "rain_sounds_noteblock_13.ogg",
+      "rain_sounds_noteblock_14.ogg",
+      "rain_sounds_noteblock_15.ogg",
+      "rain_sounds_noteblock_16.ogg"
+    ]
+  },
+  "rain_sounds_lava": {
+    "subtitle": "subtitles.btr.rain_sounds_lava",
+    "sounds": [
+      "rain_sounds_lava_1.ogg",
+      "rain_sounds_lava_2.ogg",
+      "rain_sounds_lava_3.ogg",
+      "rain_sounds_lava_4.ogg",
+      "rain_sounds_lava_5.ogg",
+      "rain_sounds_lava_6.ogg",
+      "rain_sounds_lava_7.ogg",
+      "rain_sounds_lava_8.ogg",
+      "rain_sounds_lava_9.ogg",
+      "rain_sounds_lava_10.ogg",
+      "rain_sounds_lava_11.ogg",
+      "rain_sounds_lava_12.ogg"
+    ]
+  }
+}
