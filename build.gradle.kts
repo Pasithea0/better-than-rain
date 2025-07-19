@@ -12,7 +12,7 @@ val lwjglVersion = "3.3.4"
 val lwjglNatives = when {
     Os.isFamily(Os.FAMILY_UNIX) && !Os.isFamily(Os.FAMILY_MAC) -> "natives-linux"
     Os.isFamily(Os.FAMILY_WINDOWS) -> "natives-windows"
-    Os.isFamily(Os.FAMILY_MAC) -> "natives-macos"
+    Os.isFamily(Os.FAMILY_MAC) -> "natives-macos-arm64"
     else -> error("Unsupported OS")
 }
 
@@ -155,5 +155,12 @@ tasks.processResources {
     inputs.property("version", version)
     filesMatching("fabric.mod.json") {
         expand("version" to version)
+    }
+}
+
+// Add macOS-specific JVM arguments to fix black screen issue
+tasks.named("runClient", JavaExec::class.java) {
+    if (Os.isFamily(Os.FAMILY_MAC)) {
+        jvmArgs("-XstartOnFirstThread", "-Djava.awt.headless=true")
     }
 }

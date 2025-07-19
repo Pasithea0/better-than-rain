@@ -1,38 +1,38 @@
 {
   "schemaVersion": 1,
-  "id": "examplemod",
+  "id": "betterthanrain",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This mod aims to help new BTA modders.",
+  "name": "Better than Rain!",
+  "description": "An ambiance mod inspired by \"Cool Rain\" for later versions.",
   "authors": [
-    "Turnip Labs"
+    "Pasithea0"
   ],
   "contact": {
-    "homepage": "",
-    "sources": ""
+    "homepage": "https://github.com/Pasithea0/better-than-rain",
+    "sources": "https://github.com/Pasithea0/better-than-rain"
   },
 
 	"icon": "icon.png",
-  "license": "CC0-1.0",
+  "license": "MIT",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-			"turniplabs.examplemod.ExampleMod"
+			"com.pasithea0.betterthanrain.BetterThanRainMod"
     ],
 		"beforeGameStart": [
-			"turniplabs.examplemod.ExampleMod"
+			"com.pasithea0.betterthanrain.BetterThanRainMod"
 		],
 		"afterGameStart": [
-			"turniplabs.examplemod.ExampleMod"
+			"com.pasithea0.betterthanrain.BetterThanRainMod"
 		],
 		"recipesReady": [
-			"turniplabs.examplemod.ExampleMod"
+			"com.pasithea0.betterthanrain.BetterThanRainMod"
 		]
 	},
   "mixins": [
-      "examplemod.mixins.json"
+      "betterthanrain.mixins.json"
   ],
 
   "depends": {
