@@ -9,7 +9,9 @@ import net.minecraft.core.sound.SoundCategory;
 import net.minecraft.core.world.World;
 import net.minecraft.core.world.weather.Weather;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
@@ -20,7 +22,8 @@ public class RainSoundManager {
     private static final Random RANDOM = new Random();
     private static final int SOUND_COOLDOWN_MIN = 20;
     private static final int SOUND_COOLDOWN_MAX = 50;
-    private static int cooldownTimer = 0;
+    private static final int MAX_CONCURRENT_SOUNDS = 10;
+    private static final Map<String, Integer> soundCooldowns = new HashMap<>();
 
     private static final float GLOBAL_GAIN = 2.0f;
 
@@ -91,10 +94,11 @@ public class RainSoundManager {
     }
 
     private void tickInternal(Minecraft mc) {
-        if (cooldownTimer > 0) {
-            cooldownTimer--;
-            return;
-        }
+        // Update cooldowns for all sound types
+        soundCooldowns.entrySet().removeIf(entry -> {
+            entry.setValue(entry.getValue() - 1);
+            return entry.getValue() <= 0;
+        });
 
         if (!isRaining(mc.currentWorld)) {
             return;
@@ -108,32 +112,42 @@ public class RainSoundManager {
         int playerZ = (int) Math.floor(player.z);
 
         boolean isUnderCover = isPlayerUnderCover(world, playerX, playerY, playerZ);
-        String soundToPlay = findRainSound(world, playerX, playerY, playerZ, isUnderCover);
+        Set<String> soundsToPlay = findRainSounds(world, playerX, playerY, playerZ, isUnderCover);
 
-        if (soundToPlay != null && !soundToPlay.equals("ambient.weather.rain")) {
-            IBetterThanRainOptions settings = (IBetterThanRainOptions) mc.gameSettings;
-
-            float baseVolume = 0.3f * world.weatherManager.getWeatherIntensity() * world.weatherManager.getWeatherPower();
-            float volume = baseVolume * settings.betterthanrain$getMasterRainVolume().value;
-
-            float materialMultiplier = getMaterialVolumeMultiplier(soundToPlay, settings);
-            volume *= materialMultiplier;
-
-            if (isUnderCover) {
-                volume *= settings.betterthanrain$getMuffledVolume().value;
+        // Limit concurrent sounds and filter out sounds on cooldown
+        int soundsPlayed = 0;
+        for (String soundToPlay : soundsToPlay) {
+            if (soundsPlayed >= MAX_CONCURRENT_SOUNDS) {
+                break;
             }
 
-            volume *= GLOBAL_GAIN;
+            if (soundToPlay != null && !soundToPlay.equals("ambient.weather.rain") && !soundCooldowns.containsKey(soundToPlay)) {
+                IBetterThanRainOptions settings = (IBetterThanRainOptions) mc.gameSettings;
 
-            float pitch = 0.8f + RANDOM.nextFloat() * 0.4f;
+                float baseVolume = 0.3f * world.weatherManager.getWeatherIntensity() * world.weatherManager.getWeatherPower();
+                float volume = baseVolume * settings.betterthanrain$getMasterRainVolume().value;
 
-            SoundCategory soundCategory = settings.betterthanrain$getUseWeatherSounds().value ?
-                SoundCategory.WORLD_SOUNDS : SoundCategory.WEATHER_SOUNDS;
+                float materialMultiplier = getMaterialVolumeMultiplier(soundToPlay, settings);
+                volume *= materialMultiplier;
 
-            world.playSoundEffect(null, soundCategory,
-                player.x, player.y, player.z, soundToPlay, volume, pitch);
+                if (isUnderCover) {
+                    volume *= settings.betterthanrain$getMuffledVolume().value;
+                }
 
-            cooldownTimer = RANDOM.nextInt(SOUND_COOLDOWN_MAX - SOUND_COOLDOWN_MIN + 1) + SOUND_COOLDOWN_MIN;
+                volume *= GLOBAL_GAIN;
+
+                float pitch = 0.8f + RANDOM.nextFloat() * 0.4f;
+
+                SoundCategory soundCategory = settings.betterthanrain$getUseWeatherSounds().value ?
+                    SoundCategory.WORLD_SOUNDS : SoundCategory.WEATHER_SOUNDS;
+
+                world.playSoundEffect(null, soundCategory,
+                    player.x, player.y, player.z, soundToPlay, volume, pitch);
+
+                // Add cooldown for this specific sound type
+                soundCooldowns.put(soundToPlay, RANDOM.nextInt(SOUND_COOLDOWN_MAX - SOUND_COOLDOWN_MIN + 1) + SOUND_COOLDOWN_MIN);
+                soundsPlayed++;
+            }
         }
     }
 
@@ -172,8 +186,9 @@ public class RainSoundManager {
         return false;
     }
 
-    private String findRainSound(World world, int centerX, int centerY, int centerZ, boolean isUnderCover) {
-        int searchRadius = 3;
+    private Set<String> findRainSounds(World world, int centerX, int centerY, int centerZ, boolean isUnderCover) {
+        int searchRadius = 4;
+        Set<String> foundSounds = new HashSet<>();
 
         for (int x = centerX - searchRadius; x <= centerX + searchRadius; x++) {
             for (int z = centerZ - searchRadius; z <= centerZ + searchRadius; z++) {
@@ -186,7 +201,7 @@ public class RainSoundManager {
                 if (world.canBlockBeRainedOn(x, surfaceY, z)) {
                     int blockId = world.getBlockId(x, surfaceY - 1, z);
 
-                    // Special handling for glass: check if there's glass above the player
+                    // Special handling for glass
                     boolean effectivelyUnderCover = isUnderCover;
                     if (GLASS_BLOCKS.contains(blockId)) {
                         effectivelyUnderCover = (centerY < surfaceY - 1);
@@ -195,13 +210,21 @@ public class RainSoundManager {
                     String sound = getRainSoundForBlock(blockId, effectivelyUnderCover);
 
                     if (sound != null && !sound.equals("ambient.weather.rain")) {
-                        return sound;
+                        foundSounds.add(sound);
+
+                        if (foundSounds.size() >= MAX_CONCURRENT_SOUNDS) {
+                            break;
+                        }
                     }
                 }
             }
+
+            if (foundSounds.size() >= MAX_CONCURRENT_SOUNDS) {
+                break;
+            }
         }
 
-        return null;
+        return foundSounds;
     }
 
     private String getRainSoundForBlock(int blockId, boolean isUnderCover) {
