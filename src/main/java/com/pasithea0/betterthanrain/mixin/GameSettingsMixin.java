@@ -16,6 +16,9 @@ public class GameSettingsMixin implements IBetterThanRainOptions {
     @Unique
     public OptionFloat masterRainVolume = new OptionFloat(this.thisAs, "betterthanrain.masterRainVolume", 1.0f);
 
+	@Unique
+    public OptionFloat muffledVolume = new OptionFloat(this.thisAs, "betterthanrain.muffledVolume", 1.0f);
+
     @Unique
     public OptionFloat metalRainVolume = new OptionFloat(this.thisAs, "betterthanrain.metalRainVolume", 1.0f);
 
@@ -32,13 +35,19 @@ public class GameSettingsMixin implements IBetterThanRainOptions {
     public OptionFloat foliageRainVolume = new OptionFloat(this.thisAs, "betterthanrain.foliageRainVolume", 0.8f);
 
     @Unique
-    public OptionFloat waterRainVolume = new OptionFloat(this.thisAs, "betterthanrain.waterRainVolume", 0.8f);
+    public OptionFloat waterRainVolume = new OptionFloat(this.thisAs, "betterthanrain.waterRainVolume", 0.7f);
 
     @Unique
-    public OptionFloat noteblockRainVolume = new OptionFloat(this.thisAs, "betterthanrain.noteblockRainVolume", 1.0f);
+    public OptionFloat noteblockRainVolume = new OptionFloat(this.thisAs, "betterthanrain.noteblockRainVolume", 0.5f);
 
     @Unique
-    public OptionFloat muffledVolumeMultiplier = new OptionFloat(this.thisAs, "betterthanrain.muffledVolumeMultiplier", 1.0f);
+    public OptionFloat stoneRainVolume = new OptionFloat(this.thisAs, "betterthanrain.stoneRainVolume", 1.0f);
+
+    @Unique
+    public OptionFloat woodRainVolume = new OptionFloat(this.thisAs, "betterthanrain.woodRainVolume", 1.0f);
+
+    @Unique
+    public OptionFloat plasticRainVolume = new OptionFloat(this.thisAs, "betterthanrain.plasticRainVolume", 8.0f);
 
     @Unique
     public OptionBoolean useWeatherSounds = new OptionBoolean(this.thisAs, "betterthanrain.useWeatherSounds", false);
@@ -84,8 +93,23 @@ public class GameSettingsMixin implements IBetterThanRainOptions {
     }
 
     @Override
-    public OptionFloat betterthanrain$getMuffledVolumeMultiplier() {
-        return this.muffledVolumeMultiplier;
+    public OptionFloat betterthanrain$getStoneRainVolume() {
+        return this.stoneRainVolume;
+    }
+
+    @Override
+    public OptionFloat betterthanrain$getWoodRainVolume() {
+        return this.woodRainVolume;
+    }
+
+    @Override
+    public OptionFloat betterthanrain$getPlasticRainVolume() {
+        return this.plasticRainVolume;
+    }
+
+    @Override
+    public OptionFloat betterthanrain$getMuffledVolume() {
+        return this.muffledVolume;
     }
 
     @Override

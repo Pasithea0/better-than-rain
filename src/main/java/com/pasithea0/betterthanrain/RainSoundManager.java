@@ -22,6 +22,8 @@ public class RainSoundManager {
     private static final int SOUND_COOLDOWN_MAX = 30;
     private static int cooldownTimer = 0;
 
+    private static final float GLOBAL_GAIN = 2.0f;
+
     private static final Set<Integer> METAL_BLOCKS = new HashSet<>();
     private static final Set<Integer> GLASS_BLOCKS = new HashSet<>();
     private static final Set<Integer> FABRIC_BLOCKS = new HashSet<>();
@@ -29,6 +31,9 @@ public class RainSoundManager {
     private static final Set<Integer> WATER_BLOCKS = new HashSet<>();
     private static final Set<Integer> LAVA_BLOCKS = new HashSet<>();
     private static final Set<Integer> NOTEBLOCK_BLOCKS = new HashSet<>();
+    private static final Set<Integer> STONE_BLOCKS = new HashSet<>();
+    private static final Set<Integer> WOOD_BLOCKS = new HashSet<>();
+    private static final Set<Integer> PLASTIC_BLOCKS = new HashSet<>();
 
     static {
         METAL_BLOCKS.add(431); // Block of Iron
@@ -70,6 +75,10 @@ public class RainSoundManager {
         LAVA_BLOCKS.add(233); // Molten Pumice
 
         NOTEBLOCK_BLOCKS.add(530); // Noteblock
+
+        // STONE_BLOCKS
+        // WOOD_BLOCKS
+        // PLASTIC_BLOCKS
     }
 
     public static void tick(Minecraft mc) {
@@ -111,8 +120,10 @@ public class RainSoundManager {
             volume *= materialMultiplier;
 
             if (isUnderCover) {
-                volume *= settings.betterthanrain$getMuffledVolumeMultiplier().value;
+                volume *= settings.betterthanrain$getMuffledVolume().value;
             }
+
+            volume *= GLOBAL_GAIN;
 
             float pitch = 0.8f + RANDOM.nextFloat() * 0.4f;
 
@@ -174,7 +185,14 @@ public class RainSoundManager {
 
                 if (world.canBlockBeRainedOn(x, surfaceY, z)) {
                     int blockId = world.getBlockId(x, surfaceY - 1, z);
-                    String sound = getRainSoundForBlock(blockId, isUnderCover);
+
+                    // Special handling for glass: check if there's glass above the player
+                    boolean effectivelyUnderCover = isUnderCover;
+                    if (GLASS_BLOCKS.contains(blockId)) {
+                        effectivelyUnderCover = (centerY < surfaceY - 1);
+                    }
+
+                    String sound = getRainSoundForBlock(blockId, effectivelyUnderCover);
 
                     if (sound != null && !sound.equals("ambient.weather.rain")) {
                         return sound;
@@ -222,6 +240,18 @@ public class RainSoundManager {
             return BetterThanRainSounds.RAIN_SOUNDS_NOTEBLOCK;
         }
 
+        if (STONE_BLOCKS.contains(blockId)) {
+            return BetterThanRainSounds.RAIN_SOUNDS_STONE;
+        }
+
+        if (WOOD_BLOCKS.contains(blockId)) {
+            return BetterThanRainSounds.RAIN_SOUNDS_WOOD;
+        }
+
+        if (PLASTIC_BLOCKS.contains(blockId)) {
+            return BetterThanRainSounds.RAIN_SOUNDS_PLASTIC;
+        }
+
         return null;
     }
 
@@ -240,6 +270,12 @@ public class RainSoundManager {
             return settings.betterthanrain$getWaterRainVolume().value;
         } else if (soundToPlay.contains("rain_sounds_noteblock")) {
             return settings.betterthanrain$getNoteblockRainVolume().value;
+        } else if (soundToPlay.contains("rain_sounds_stone")) {
+            return settings.betterthanrain$getStoneRainVolume().value;
+        } else if (soundToPlay.contains("rain_sounds_wood")) {
+            return settings.betterthanrain$getWoodRainVolume().value;
+        } else if (soundToPlay.contains("rain_sounds_plastic")) {
+            return settings.betterthanrain$getPlasticRainVolume().value;
         }
 
         return 1.0f;

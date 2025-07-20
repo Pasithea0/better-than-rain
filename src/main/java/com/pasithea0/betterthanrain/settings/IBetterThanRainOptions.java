@@ -5,6 +5,7 @@ import net.minecraft.client.option.OptionBoolean;
 
 public interface IBetterThanRainOptions {
     OptionFloat betterthanrain$getMasterRainVolume();
+	OptionFloat betterthanrain$getMuffledVolume();
 
     OptionFloat betterthanrain$getMetalRainVolume();
     OptionFloat betterthanrain$getGlassRainVolume();
@@ -13,8 +14,9 @@ public interface IBetterThanRainOptions {
     OptionFloat betterthanrain$getFoliageRainVolume();
     OptionFloat betterthanrain$getWaterRainVolume();
     OptionFloat betterthanrain$getNoteblockRainVolume();
-
-    OptionFloat betterthanrain$getMuffledVolumeMultiplier();
+    OptionFloat betterthanrain$getStoneRainVolume();
+    OptionFloat betterthanrain$getWoodRainVolume();
+    OptionFloat betterthanrain$getPlasticRainVolume();
 
     OptionBoolean betterthanrain$getUseWeatherSounds();
 }

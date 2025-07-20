@@ -1,15 +1,25 @@
 subtitles.btr.test=Test Sound
 subtitles.btr.rain_sounds_metal=Rain on Metal
 subtitles.btr.rain_sounds_metal_muffled=Muffled Rain on Metal
+subtitles.btr.rain_sounds_metal_thin=Rain on Thin Metal
 subtitles.btr.rain_sounds_fabric=Rain on Fabric
 subtitles.btr.rain_sounds_fabric_muffled=Muffled Rain on Fabric
+subtitles.btr.rain_sounds_fabric_thin=Rain on Thin Fabric
 subtitles.btr.rain_sounds_glass=Rain on Glass
 subtitles.btr.rain_sounds_glass_muffled=Muffled Rain on Glass
 subtitles.btr.rain_sounds_foliage=Rain on Foliage
 subtitles.btr.rain_sounds_water=Rain on Water
+subtitles.btr.rain_sounds_stone=Rain on Stone
+subtitles.btr.rain_sounds_stone_muffled=Muffled Rain on Stone
+subtitles.btr.rain_sounds_wood_muffled=Muffled Rain on Wood
+subtitles.btr.rain_sounds_plastic=Rain on Plastic
 subtitles.btr.rain_sounds_amethyst=Rain on Amethyst
 subtitles.btr.rain_sounds_noteblock=Rain on Note Block
 subtitles.btr.rain_sounds_lava=Rain on Lava
+subtitles.btr.thunder_close=Close Thunder
+subtitles.btr.thunder_distant=Distant Thunder
+subtitles.btr.rain_light=Light Rain
+subtitles.btr.rain_medium=Medium Rain
 
 # Settings page
 betterthanrain.options.title=Better than Rain
@@ -18,11 +28,14 @@ betterthanrain.options.materials=Material Volumes
 
 # Volume settings (with options. prefix for BTA)
 options.betterthanrain.masterRainVolume=Master Rain Volume
-options.betterthanrain.muffledVolumeMultiplier=Muffled Volume
+options.betterthanrain.muffledVolume=Muffled Volume
 options.betterthanrain.useWeatherSounds=Use World Sound Category
 options.betterthanrain.metalRainVolume=Metal Rain Volume
 options.betterthanrain.glassRainVolume=Glass Rain Volume
 options.betterthanrain.fabricRainVolume=Fabric Rain Volume
+options.betterthanrain.stoneRainVolume=Stone Rain Volume
+options.betterthanrain.woodRainVolume=Wood Rain Volume
+options.betterthanrain.plasticRainVolume=Plastic Rain Volume
 options.betterthanrain.lavaRainVolume=Lava Rain Volume
 options.betterthanrain.foliageRainVolume=Foliage Rain Volume
 options.betterthanrain.waterRainVolume=Water Rain Volume
