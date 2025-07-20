@@ -27,63 +27,6 @@ public class RainSoundManager {
 
     private static final float GLOBAL_GAIN = 2.0f;
 
-    private static final Set<Integer> METAL_BLOCKS = new HashSet<>();
-    private static final Set<Integer> GLASS_BLOCKS = new HashSet<>();
-    private static final Set<Integer> FABRIC_BLOCKS = new HashSet<>();
-    private static final Set<Integer> FOLIAGE_BLOCKS = new HashSet<>();
-    private static final Set<Integer> WATER_BLOCKS = new HashSet<>();
-    private static final Set<Integer> LAVA_BLOCKS = new HashSet<>();
-    private static final Set<Integer> NOTEBLOCK_BLOCKS = new HashSet<>();
-    private static final Set<Integer> STONE_BLOCKS = new HashSet<>();
-    private static final Set<Integer> WOOD_BLOCKS = new HashSet<>();
-    private static final Set<Integer> PLASTIC_BLOCKS = new HashSet<>();
-
-    static {
-        METAL_BLOCKS.add(431); // Block of Iron
-        METAL_BLOCKS.add(432); // Block of Gold
-        METAL_BLOCKS.add(437); // Block of Steel
-
-        GLASS_BLOCKS.add(730); // Ice
-        GLASS_BLOCKS.add(190); // Glass
-        GLASS_BLOCKS.add(191); // Tinted Glass
-        GLASS_BLOCKS.add(192); // Reinforced Glass
-
-        FABRIC_BLOCKS.add(110); // Wool
-        FABRIC_BLOCKS.add(850); // Lamp idle
-        FABRIC_BLOCKS.add(851); // Lamp active
-        FABRIC_BLOCKS.add(852); // Lamp inverted idle
-        FABRIC_BLOCKS.add(853); // Lamp inverted active
-		FABRIC_BLOCKS.add(910); // Paper Wall
-
-        FOLIAGE_BLOCKS.add(290); // Oak Leaves
-        FOLIAGE_BLOCKS.add(291); // Retro Leaves
-        FOLIAGE_BLOCKS.add(292); // Pine Leaves
-        FOLIAGE_BLOCKS.add(293); // Birch Leaves
-        FOLIAGE_BLOCKS.add(294); // Cherry Leaves
-        FOLIAGE_BLOCKS.add(295); // Eucalyptus Leaves
-        FOLIAGE_BLOCKS.add(296); // Shrub Leaves
-        FOLIAGE_BLOCKS.add(297); // Flowering Cherry Leaves
-        FOLIAGE_BLOCKS.add(298); // Cacao Leaves
-        FOLIAGE_BLOCKS.add(299); // Thorn Leaves
-        FOLIAGE_BLOCKS.add(300); // Palm Leaves
-
-        WATER_BLOCKS.add(270); // Flowing Water
-        WATER_BLOCKS.add(271); // Still Water
-
-        LAVA_BLOCKS.add(272); // Flowing Lava
-        LAVA_BLOCKS.add(273); // Still Lava
-        LAVA_BLOCKS.add(801); // Igneous Cobbled Netherrack
-        LAVA_BLOCKS.add(420); // Nether Coal Ore
-        LAVA_BLOCKS.add(436); // Block of Nether Coal
-        LAVA_BLOCKS.add(233); // Molten Pumice
-
-        NOTEBLOCK_BLOCKS.add(530); // Noteblock
-
-        // STONE_BLOCKS
-        // WOOD_BLOCKS
-        // PLASTIC_BLOCKS
-    }
-
     public static void tick(Minecraft mc) {
         if (mc.currentWorld == null || mc.thePlayer == null) {
             return;
@@ -203,7 +146,7 @@ public class RainSoundManager {
 
                     // Special handling for glass
                     boolean effectivelyUnderCover = isUnderCover;
-                    if (GLASS_BLOCKS.contains(blockId)) {
+                    if (BlockTypeMappings.GLASS_BLOCKS.contains(blockId)) {
                         effectivelyUnderCover = (centerY < surfaceY - 1);
                     }
 
@@ -232,46 +175,46 @@ public class RainSoundManager {
             return null;
         }
 
-        if (METAL_BLOCKS.contains(blockId)) {
+        if (BlockTypeMappings.METAL_BLOCKS.contains(blockId)) {
             return isUnderCover ? BetterThanRainSounds.RAIN_SOUNDS_METAL_MUFFLED
                                 : BetterThanRainSounds.RAIN_SOUNDS_METAL;
         }
 
-        if (GLASS_BLOCKS.contains(blockId)) {
+        if (BlockTypeMappings.GLASS_BLOCKS.contains(blockId)) {
             return isUnderCover ? BetterThanRainSounds.RAIN_SOUNDS_GLASS_MUFFLED
                                 : BetterThanRainSounds.RAIN_SOUNDS_GLASS;
         }
 
-        if (FABRIC_BLOCKS.contains(blockId)) {
+        if (BlockTypeMappings.FABRIC_BLOCKS.contains(blockId)) {
             return isUnderCover ? BetterThanRainSounds.RAIN_SOUNDS_FABRIC_MUFFLED
                                 : BetterThanRainSounds.RAIN_SOUNDS_FABRIC;
         }
 
-        if (FOLIAGE_BLOCKS.contains(blockId)) {
+        if (BlockTypeMappings.FOLIAGE_BLOCKS.contains(blockId)) {
             return BetterThanRainSounds.RAIN_SOUNDS_FOLIAGE;
         }
 
-        if (WATER_BLOCKS.contains(blockId)) {
+        if (BlockTypeMappings.WATER_BLOCKS.contains(blockId)) {
             return BetterThanRainSounds.RAIN_SOUNDS_WATER;
         }
 
-        if (LAVA_BLOCKS.contains(blockId)) {
+        if (BlockTypeMappings.LAVA_BLOCKS.contains(blockId)) {
             return BetterThanRainSounds.RAIN_SOUNDS_LAVA;
         }
 
-        if (NOTEBLOCK_BLOCKS.contains(blockId)) {
+        if (BlockTypeMappings.NOTEBLOCK_BLOCKS.contains(blockId)) {
             return BetterThanRainSounds.RAIN_SOUNDS_NOTEBLOCK;
         }
 
-        if (STONE_BLOCKS.contains(blockId)) {
+        if (BlockTypeMappings.STONE_BLOCKS.contains(blockId)) {
             return BetterThanRainSounds.RAIN_SOUNDS_STONE;
         }
 
-        if (WOOD_BLOCKS.contains(blockId)) {
+        if (BlockTypeMappings.WOOD_BLOCKS.contains(blockId)) {
             return BetterThanRainSounds.RAIN_SOUNDS_WOOD;
         }
 
-        if (PLASTIC_BLOCKS.contains(blockId)) {
+        if (BlockTypeMappings.PLASTIC_BLOCKS.contains(blockId)) {
             return BetterThanRainSounds.RAIN_SOUNDS_PLASTIC;
         }
 
