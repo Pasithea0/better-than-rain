@@ -15,7 +15,7 @@ public class BetterThanRainMod implements ModInitializer, RecipeEntrypoint, Game
 
     @Override
     public void onInitialize() {
-        LOGGER.info("✅ Better than Rain! mod initialized.");
+        LOGGER.info("Better than Rain! mod initialized.");
     }
 
     @Override
@@ -38,7 +38,7 @@ public class BetterThanRainMod implements ModInitializer, RecipeEntrypoint, Game
     @Override
     public void beforeClientStart() {
         SoundRepository.registerNamespace(MOD_ID);
-        LOGGER.info("✅ Better than Rain! client initialized.");
+        LOGGER.info("Better than Rain! client initialized.");
     }
 
     @Override
