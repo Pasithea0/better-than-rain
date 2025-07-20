@@ -1,10 +1,4 @@
 {
-  "test": {
-    "subtitle": "subtitles.btr.test",
-    "sounds": [
-      "test.ogg"
-    ]
-  },
   "rain_sounds_metal": {
     "subtitle": "subtitles.btr.rain_sounds_metal",
     "sounds": [
