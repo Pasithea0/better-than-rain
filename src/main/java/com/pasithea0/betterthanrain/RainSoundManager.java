@@ -180,6 +180,11 @@ public class RainSoundManager {
                                 : BetterThanRainSounds.RAIN_SOUNDS_METAL;
         }
 
+		if (BlockTypeMappings.METAL_BLOCKS_THIN.contains(blockId)) {
+            return isUnderCover ? BetterThanRainSounds.RAIN_SOUNDS_METAL_THIN
+                                : null; // No normal thin metal sounds for now
+        }
+
         if (BlockTypeMappings.GLASS_BLOCKS.contains(blockId)) {
             return isUnderCover ? BetterThanRainSounds.RAIN_SOUNDS_GLASS_MUFFLED
                                 : BetterThanRainSounds.RAIN_SOUNDS_GLASS;
@@ -188,6 +193,11 @@ public class RainSoundManager {
         if (BlockTypeMappings.FABRIC_BLOCKS.contains(blockId)) {
             return isUnderCover ? BetterThanRainSounds.RAIN_SOUNDS_FABRIC_MUFFLED
                                 : BetterThanRainSounds.RAIN_SOUNDS_FABRIC;
+        }
+
+		if (BlockTypeMappings.FABRIC_BLOCKS_THIN.contains(blockId)) {
+            return isUnderCover ? BetterThanRainSounds.RAIN_SOUNDS_FABRIC_THIN
+                                : null; // No normal thin fabric sounds for now
         }
 
         if (BlockTypeMappings.FOLIAGE_BLOCKS.contains(blockId)) {
@@ -207,11 +217,13 @@ public class RainSoundManager {
         }
 
         if (BlockTypeMappings.STONE_BLOCKS.contains(blockId)) {
-            return BetterThanRainSounds.RAIN_SOUNDS_STONE;
+            return isUnderCover ? BetterThanRainSounds.RAIN_SOUNDS_STONE_MUFFLED
+								: BetterThanRainSounds.RAIN_SOUNDS_STONE;
         }
 
         if (BlockTypeMappings.WOOD_BLOCKS.contains(blockId)) {
-            return BetterThanRainSounds.RAIN_SOUNDS_WOOD;
+            return isUnderCover ? BetterThanRainSounds.RAIN_SOUNDS_WOOD_MUFFLED
+							    : null; // No normal wood sounds for now
         }
 
         if (BlockTypeMappings.PLASTIC_BLOCKS.contains(blockId)) {
@@ -224,9 +236,13 @@ public class RainSoundManager {
     private float getMaterialVolumeMultiplier(String soundToPlay, IBetterThanRainOptions settings) {
         if (soundToPlay.contains("rain_sounds_metal")) {
             return settings.betterthanrain$getMetalRainVolume().value;
+		} else if (soundToPlay.contains("rain_sounds_metal_thin")) {
+            return settings.betterthanrain$getMetalRainVolume().value;
         } else if (soundToPlay.contains("rain_sounds_glass")) {
             return settings.betterthanrain$getGlassRainVolume().value;
         } else if (soundToPlay.contains("rain_sounds_fabric")) {
+            return settings.betterthanrain$getFabricRainVolume().value;
+		} else if (soundToPlay.contains("rain_sounds_fabric_thin")) {
             return settings.betterthanrain$getFabricRainVolume().value;
         } else if (soundToPlay.contains("rain_sounds_lava")) {
             return settings.betterthanrain$getLavaRainVolume().value;

@@ -14,6 +14,8 @@ public class BlockTypeMappings {
     public static final Set<Integer> STONE_BLOCKS = new HashSet<>();
     public static final Set<Integer> WOOD_BLOCKS = new HashSet<>();
     public static final Set<Integer> PLASTIC_BLOCKS = new HashSet<>();
+    public static final Set<Integer> METAL_BLOCKS_THIN = new HashSet<>();
+    public static final Set<Integer> FABRIC_BLOCKS_THIN = new HashSet<>();
 
     static {
         METAL_BLOCKS.add(431); // Block of Iron
@@ -56,8 +58,27 @@ public class BlockTypeMappings {
 
         NOTEBLOCK_BLOCKS.add(530); // Noteblock
 
-        // STONE_BLOCKS
-        // WOOD_BLOCKS
+		WOOD_BLOCKS.add(50); // Wooden Plank
+		WOOD_BLOCKS.add(51); // Painted Wood
+		WOOD_BLOCKS.add(140); // Wooden Slab
+		WOOD_BLOCKS.add(160); // Wooden Stairs
+		WOOD_BLOCKS.add(280); // Oak Log
+		WOOD_BLOCKS.add(281); // Pine Log
+		WOOD_BLOCKS.add(282); // Birch Log
+		WOOD_BLOCKS.add(283); // Cherry Log
+		WOOD_BLOCKS.add(284); // Eucalyptus Log
+		WOOD_BLOCKS.add(285); // Mossy Oak Log
+		WOOD_BLOCKS.add(286); // Thorn Log
+		WOOD_BLOCKS.add(287); // Palm Log
+
+        STONE_BLOCKS.add(10); // Cobblestone
+		STONE_BLOCKS.add(11); // Mossy Cobblestone
+        STONE_BLOCKS.add(12); // Cobbled Basalt
+        STONE_BLOCKS.add(13); // Cobbled Limestone
+        STONE_BLOCKS.add(14); // Cobbled Granite
+
         // PLASTIC_BLOCKS
+		// METAL_BLOCKS_THIN
+		// FABRIC_BLOCKS_THIN
     }
 }

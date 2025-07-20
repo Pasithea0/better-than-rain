@@ -41,10 +41,10 @@ public class GameSettingsMixin implements IBetterThanRainOptions {
     public OptionFloat noteblockRainVolume = new OptionFloat(this.thisAs, "betterthanrain.noteblockRainVolume", 0.5f);
 
     @Unique
-    public OptionFloat stoneRainVolume = new OptionFloat(this.thisAs, "betterthanrain.stoneRainVolume", 1.0f);
+    public OptionFloat stoneRainVolume = new OptionFloat(this.thisAs, "betterthanrain.stoneRainVolume", 0.5f);
 
     @Unique
-    public OptionFloat woodRainVolume = new OptionFloat(this.thisAs, "betterthanrain.woodRainVolume", 1.0f);
+    public OptionFloat woodRainVolume = new OptionFloat(this.thisAs, "betterthanrain.woodRainVolume", 0.5f);
 
     @Unique
     public OptionFloat plasticRainVolume = new OptionFloat(this.thisAs, "betterthanrain.plasticRainVolume", 0.8f);
