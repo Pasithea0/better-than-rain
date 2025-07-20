@@ -18,8 +18,8 @@ import java.util.Set;
  */
 public class RainSoundManager {
     private static final Random RANDOM = new Random();
-    private static final int SOUND_COOLDOWN_MIN = 10;
-    private static final int SOUND_COOLDOWN_MAX = 30;
+    private static final int SOUND_COOLDOWN_MIN = 20;
+    private static final int SOUND_COOLDOWN_MAX = 50;
     private static int cooldownTimer = 0;
 
     private static final float GLOBAL_GAIN = 2.0f;
