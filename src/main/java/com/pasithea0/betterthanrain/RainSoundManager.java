@@ -1,11 +1,9 @@
 package com.pasithea0.betterthanrain;
 
-import com.pasithea0.betterthanrain.BetterThanRainSounds;
 import com.pasithea0.betterthanrain.settings.IBetterThanRainOptions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.block.Block;
 import net.minecraft.core.block.Blocks;
-import net.minecraft.core.block.material.Material;
 import net.minecraft.core.entity.player.Player;
 import net.minecraft.core.sound.SoundCategory;
 import net.minecraft.core.world.World;
