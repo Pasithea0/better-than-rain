@@ -1,6 +1,7 @@
 package com.pasithea0.betterthanrain;
 
 import com.pasithea0.betterthanrain.BetterThanRainSounds;
+import com.pasithea0.betterthanrain.settings.IBetterThanRainOptions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.block.Block;
 import net.minecraft.core.block.Blocks;
@@ -16,42 +17,38 @@ import java.util.Set;
 
 /**
  * Manages rain sound detection and playback based on blocks near the player.
- * Uses a simple position-based detection system instead of trying to hook into existing rain sounds.
  */
 public class RainSoundManager {
     private static final Random RANDOM = new Random();
-    private static final int SOUND_COOLDOWN = 8; // Ticks between sound plays
+    private static final int SOUND_COOLDOWN_MIN = 20;
+    private static final int SOUND_COOLDOWN_MAX = 60;
     private static int cooldownTimer = 0;
 
-    // Block sets for material detection
     private static final Set<Integer> METAL_BLOCKS = new HashSet<>();
     private static final Set<Integer> GLASS_BLOCKS = new HashSet<>();
     private static final Set<Integer> FABRIC_BLOCKS = new HashSet<>();
     private static final Set<Integer> FOLIAGE_BLOCKS = new HashSet<>();
     private static final Set<Integer> WATER_BLOCKS = new HashSet<>();
     private static final Set<Integer> LAVA_BLOCKS = new HashSet<>();
-    private static final int NOTEBLOCK_ID = 530;
+    private static final Set<Integer> NOTEBLOCK_BLOCKS = new HashSet<>();
 
     static {
-        // Metal blocks
         METAL_BLOCKS.add(431); // Block of Iron
         METAL_BLOCKS.add(432); // Block of Gold
         METAL_BLOCKS.add(437); // Block of Steel
 
-        // Glass blocks
         GLASS_BLOCKS.add(730); // Ice
         GLASS_BLOCKS.add(190); // Glass
         GLASS_BLOCKS.add(191); // Tinted Glass
         GLASS_BLOCKS.add(192); // Reinforced Glass
 
-        // Fabric blocks (wool variants and lamps)
-        FABRIC_BLOCKS.add(110); // Wool (all colors use same base ID)
+        FABRIC_BLOCKS.add(110); // Wool
         FABRIC_BLOCKS.add(850); // Lamp idle
         FABRIC_BLOCKS.add(851); // Lamp active
         FABRIC_BLOCKS.add(852); // Lamp inverted idle
         FABRIC_BLOCKS.add(853); // Lamp inverted active
+		FABRIC_BLOCKS.add(910); // Paper Wall
 
-        // Foliage blocks (leaves)
         FOLIAGE_BLOCKS.add(290); // Oak Leaves
         FOLIAGE_BLOCKS.add(291); // Retro Leaves
         FOLIAGE_BLOCKS.add(292); // Pine Leaves
@@ -64,24 +61,20 @@ public class RainSoundManager {
         FOLIAGE_BLOCKS.add(299); // Thorn Leaves
         FOLIAGE_BLOCKS.add(300); // Palm Leaves
 
-        // Water blocks
         WATER_BLOCKS.add(270); // Flowing Water
         WATER_BLOCKS.add(271); // Still Water
 
-        // Lava blocks
         LAVA_BLOCKS.add(272); // Flowing Lava
         LAVA_BLOCKS.add(273); // Still Lava
         LAVA_BLOCKS.add(801); // Igneous Cobbled Netherrack
         LAVA_BLOCKS.add(420); // Nether Coal Ore
         LAVA_BLOCKS.add(436); // Block of Nether Coal
         LAVA_BLOCKS.add(233); // Molten Pumice
+
+        NOTEBLOCK_BLOCKS.add(530); // Noteblock
     }
 
-    /**
-     * Called every tick from the mixin
-     */
     public static void tick(Minecraft mc) {
-        // Only run on client and when player exists
         if (mc.currentWorld == null || mc.thePlayer == null) {
             return;
         }
@@ -91,13 +84,11 @@ public class RainSoundManager {
     }
 
     private void tickInternal(Minecraft mc) {
-        // Decrement cooldown
         if (cooldownTimer > 0) {
             cooldownTimer--;
             return;
         }
 
-        // Check if it's raining
         if (!isRaining(mc.currentWorld)) {
             return;
         }
@@ -105,119 +96,103 @@ public class RainSoundManager {
         Player player = mc.thePlayer;
         World world = mc.currentWorld;
 
-        // Get player position
         int playerX = (int) Math.floor(player.x);
         int playerY = (int) Math.floor(player.y);
         int playerZ = (int) Math.floor(player.z);
 
-        // Check if player is under cover (sheltered from rain)
         boolean isUnderCover = isPlayerUnderCover(world, playerX, playerY, playerZ);
-
-        // Check for rain-eligible blocks around the player
         String soundToPlay = findRainSound(world, playerX, playerY, playerZ, isUnderCover);
 
         if (soundToPlay != null && !soundToPlay.equals("ambient.weather.rain")) {
-            // Play the rain sound
-            float volume = 0.3f * world.weatherManager.getWeatherIntensity() * world.weatherManager.getWeatherPower();
-            float pitch = 0.8f + RANDOM.nextFloat() * 0.4f; // Random pitch variation
+            IBetterThanRainOptions settings = (IBetterThanRainOptions) mc.gameSettings;
 
-            world.playSoundEffect(null, SoundCategory.WEATHER_SOUNDS,
+            float baseVolume = 0.3f * world.weatherManager.getWeatherIntensity() * world.weatherManager.getWeatherPower();
+            float volume = baseVolume * settings.betterthanrain$getMasterRainVolume().value;
+
+            float materialMultiplier = getMaterialVolumeMultiplier(soundToPlay, settings);
+            volume *= materialMultiplier;
+
+            if (isUnderCover) {
+                volume *= settings.betterthanrain$getMuffledVolumeMultiplier().value;
+            }
+
+            float pitch = 0.8f + RANDOM.nextFloat() * 0.4f;
+
+            SoundCategory soundCategory = settings.betterthanrain$getUseWeatherSounds().value ?
+                SoundCategory.WORLD_SOUNDS : SoundCategory.WEATHER_SOUNDS;
+
+            world.playSoundEffect(null, soundCategory,
                 player.x, player.y, player.z, soundToPlay, volume, pitch);
 
-            // Set cooldown to prevent spam
-            cooldownTimer = SOUND_COOLDOWN;
+            cooldownTimer = RANDOM.nextInt(SOUND_COOLDOWN_MAX - SOUND_COOLDOWN_MIN + 1) + SOUND_COOLDOWN_MIN;
         }
     }
 
-    /**
-     * Check if it's currently raining
-     */
     private boolean isRaining(World world) {
         Weather currentWeather = world.getCurrentWeather();
         if (currentWeather == null) {
             return false;
         }
 
-        // Check if current weather has precipitation and intensity > 0
-        return currentWeather.isPrecipitation &&
-               world.weatherManager.getWeatherIntensity() > 0.1f;
+        return currentWeather.isPrecipitation && world.weatherManager.getWeatherIntensity() > 0.1f;
     }
 
-    /**
-     * Check if the player is under cover (sheltered from rain)
-     */
     private boolean isPlayerUnderCover(World world, int playerX, int playerY, int playerZ) {
-        // Check blocks above the player up to rain level
         int rainLevel = world.findTopSolidBlock(playerX, playerZ);
 
-        // If the player is close to or above the rain level, they're not under cover
         if (playerY >= rainLevel - 1) {
             return false;
         }
 
-        // Check for solid blocks above the player that would block rain
         for (int y = playerY + 1; y <= rainLevel; y++) {
             int blockId = world.getBlockId(playerX, y, playerZ);
             if (blockId > 0 && blockId < Blocks.solid.length) {
-                // Check if this block is solid using BTA's solid array
                 if (Blocks.solid[blockId]) {
-                    return true; // Found solid cover above
+                    return true;
                 }
 
-                // Also check the block's render method as a fallback
                 Block<?> block = Blocks.blocksList[blockId];
                 if (block != null && !block.isSolidRender()) {
-                    continue; // Not solid, keep checking
+                    continue;
                 }
 
-                return true; // Found solid cover
+                return true;
             }
         }
 
         return false;
     }
 
-    /**
-     * Find the appropriate rain sound for blocks around the player
-     */
     private String findRainSound(World world, int centerX, int centerY, int centerZ, boolean isUnderCover) {
-        // Sample blocks in a 7x7 area around the player
         int searchRadius = 3;
 
         for (int x = centerX - searchRadius; x <= centerX + searchRadius; x++) {
             for (int z = centerZ - searchRadius; z <= centerZ + searchRadius; z++) {
-                // Check if this position can be rained on
                 int surfaceY = world.findTopSolidBlock(x, z);
 
-                // Only check blocks close to player's height (within 5 blocks up/down)
                 if (Math.abs(surfaceY - centerY) > 5) {
                     continue;
                 }
 
-                // Check if the surface block can actually be rained on
                 if (world.canBlockBeRainedOn(x, surfaceY, z)) {
-                    int blockId = world.getBlockId(x, surfaceY - 1, z); // Block below the rain hit point
+                    int blockId = world.getBlockId(x, surfaceY - 1, z);
                     String sound = getRainSoundForBlock(blockId, isUnderCover);
 
-                    if (!sound.equals("ambient.weather.rain")) {
-                        return sound; // Found a special material
+                    if (sound != null && !sound.equals("ambient.weather.rain")) {
+                        return sound;
                     }
                 }
             }
         }
 
-        return null; // No special materials found
+        return null;
     }
 
-    /**
-     * Get the appropriate rain sound for a specific block, with muffled variants when under cover
-     */
     private String getRainSoundForBlock(int blockId, boolean isUnderCover) {
         if (blockId <= 0) {
             return null;
         }
 
-        // Check specific block types using our curated lists
         if (METAL_BLOCKS.contains(blockId)) {
             return isUnderCover ? BetterThanRainSounds.RAIN_SOUNDS_METAL_MUFFLED
                                 : BetterThanRainSounds.RAIN_SOUNDS_METAL;
@@ -245,11 +220,30 @@ public class RainSoundManager {
             return BetterThanRainSounds.RAIN_SOUNDS_LAVA;
         }
 
-        if (blockId == NOTEBLOCK_ID) {
+        if (NOTEBLOCK_BLOCKS.contains(blockId)) {
             return BetterThanRainSounds.RAIN_SOUNDS_NOTEBLOCK;
         }
 
-        // Default to generic rain sound for unrecognized blocks
         return null;
+    }
+
+    private float getMaterialVolumeMultiplier(String soundToPlay, IBetterThanRainOptions settings) {
+        if (soundToPlay.contains("rain_sounds_metal")) {
+            return settings.betterthanrain$getMetalRainVolume().value;
+        } else if (soundToPlay.contains("rain_sounds_glass")) {
+            return settings.betterthanrain$getGlassRainVolume().value;
+        } else if (soundToPlay.contains("rain_sounds_fabric")) {
+            return settings.betterthanrain$getFabricRainVolume().value;
+        } else if (soundToPlay.contains("rain_sounds_lava")) {
+            return settings.betterthanrain$getLavaRainVolume().value;
+        } else if (soundToPlay.contains("rain_sounds_foliage")) {
+            return settings.betterthanrain$getFoliageRainVolume().value;
+        } else if (soundToPlay.contains("rain_sounds_water")) {
+            return settings.betterthanrain$getWaterRainVolume().value;
+        } else if (soundToPlay.contains("rain_sounds_noteblock")) {
+            return settings.betterthanrain$getNoteblockRainVolume().value;
+        }
+
+        return 1.0f;
     }
 }

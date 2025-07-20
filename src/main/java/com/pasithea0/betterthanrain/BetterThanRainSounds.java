@@ -2,13 +2,10 @@ package com.pasithea0.betterthanrain;
 
 /**
  * Sound constants for Better than Rain mod.
- * Adapted from Cool Rain for BTA's string-based sound system.
  */
 public class BetterThanRainSounds {
-    // Get the mod ID from the main class
     private static final String MOD_ID = BetterThanRainMod.MOD_ID;
 
-    // Rain sound categories
     public static final String RAIN_SOUNDS_METAL = MOD_ID + ":rain_sounds_metal";
     public static final String RAIN_SOUNDS_METAL_MUFFLED = MOD_ID + ":rain_sounds_metal_muffled";
     public static final String RAIN_SOUNDS_FABRIC = MOD_ID + ":rain_sounds_fabric";

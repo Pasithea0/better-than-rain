@@ -10,3 +10,20 @@ subtitles.btr.rain_sounds_water=Rain on Water
 subtitles.btr.rain_sounds_amethyst=Rain on Amethyst
 subtitles.btr.rain_sounds_noteblock=Rain on Note Block
 subtitles.btr.rain_sounds_lava=Rain on Lava
+
+# Settings page
+betterthanrain.options.title=Better than Rain
+betterthanrain.options.master=Master Volume
+betterthanrain.options.materials=Material Volumes
+
+# Volume settings (with options. prefix for BTA)
+options.betterthanrain.masterRainVolume=Master Rain Volume
+options.betterthanrain.muffledVolumeMultiplier=Muffled Volume
+options.betterthanrain.useWeatherSounds=Use World Sound Category
+options.betterthanrain.metalRainVolume=Metal Rain Volume
+options.betterthanrain.glassRainVolume=Glass Rain Volume
+options.betterthanrain.fabricRainVolume=Fabric Rain Volume
+options.betterthanrain.lavaRainVolume=Lava Rain Volume
+options.betterthanrain.foliageRainVolume=Foliage Rain Volume
+options.betterthanrain.waterRainVolume=Water Rain Volume
+options.betterthanrain.noteblockRainVolume=Noteblock Rain Volume
