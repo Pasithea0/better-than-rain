@@ -11,26 +11,89 @@ import net.minecraft.client.option.OptionBoolean;
 import net.minecraft.client.option.OptionFloat;
 import net.minecraft.client.option.GameSettings;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Manages rain sound detection and playback based on blocks near the player.
  */
 public class RainSoundManager {
     private static final Random RANDOM = new Random();
+
+    // Performance constants
+    private static final int SEARCH_RADIUS = 6;
+    private static final int MAX_SURFACE_Y_DIFF = 10;
+    private static final float MIN_WEATHER_INTENSITY = 0.1f;
+    private static final float GLOBAL_GAIN = 2.0f;
+
+    // Sound management constants
     private static final int SOUND_COOLDOWN_MIN = 20;
     private static final int SOUND_COOLDOWN_MAX = 50;
-    private static final int MAX_CONCURRENT_SOUNDS = 10;
-    private static final Map<String, Integer> soundCooldowns = new HashMap<>();
+    private static final int TICK_INTERVAL = 3; // Faster for bouncing sounds
 
-    private static final float GLOBAL_GAIN = 2.0f;
+    // Cached data structures
+    private static final Map<String, SoundData> activeSounds = new HashMap<>();
+    private static final Set<BlockPosition> checkedPositions = new HashSet<>();
+    private static final Map<String, OptionFloat> cachedFloatOptions = new HashMap<>();
+    private static final Map<String, OptionBoolean> cachedBooleanOptions = new HashMap<>();
+
+    private static int tickCounter = 0;
+    private static boolean lastRainState = false;
+
+    // Sound data class for better management
+    private static class SoundData {
+        final int cooldown;
+        final long playTime;
+
+        SoundData(int cooldown) {
+            this.cooldown = cooldown;
+            this.playTime = System.currentTimeMillis();
+        }
+    }
+
+    // Simple position class for caching
+    private static class BlockPosition {
+        final int x, y, z;
+
+        BlockPosition(int x, int y, int z) {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (!(obj instanceof BlockPosition)) return false;
+            BlockPosition pos = (BlockPosition) obj;
+            return x == pos.x && y == pos.y && z == pos.z;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(x, y, z);
+        }
+    }
+
+    private static class SoundCandidate {
+        final String soundName;
+        final BlockPosition position;
+
+        SoundCandidate(String soundName, BlockPosition position) {
+            this.soundName = soundName;
+            this.position = position;
+        }
+    }
 
     public static void tick(Minecraft mc) {
         if (mc.currentWorld == null || mc.thePlayer == null) {
+            cleanup();
+            return;
+        }
+
+        tickCounter++;
+
+        // Only process every TICK_INTERVAL ticks for performance
+        if (tickCounter % TICK_INTERVAL != 0) {
             return;
         }
 
@@ -39,74 +102,148 @@ public class RainSoundManager {
     }
 
     private void tickInternal(Minecraft mc) {
-        // Update cooldowns for all sound types
-        soundCooldowns.entrySet().removeIf(entry -> {
-            entry.setValue(entry.getValue() - 1);
-            return entry.getValue() <= 0;
-        });
+        updateActiveSounds();
 
-        if (!isRaining(mc.currentWorld)) {
+        World world = mc.currentWorld;
+        Player player = mc.thePlayer;
+
+        boolean currentlyRaining = isRaining(world);
+        float currentIntensity = currentlyRaining ? world.weatherManager.getWeatherIntensity() : 0.0f;
+
+        // Early exit if not raining
+        if (!currentlyRaining) {
+            if (lastRainState) {
+                // Rain just stopped, cleanup
+                cleanup();
+                lastRainState = false;
+            }
             return;
         }
 
-        Player player = mc.thePlayer;
-        World world = mc.currentWorld;
-
+        // Cache player position
         int playerX = (int) Math.floor(player.x);
         int playerY = (int) Math.floor(player.y);
         int playerZ = (int) Math.floor(player.z);
 
+        // Check if we need to play a new sound (bouncing effect)
+        if (activeSounds.isEmpty()) {
+            playNextRainSound(world, player, playerX, playerY, playerZ, currentIntensity);
+        }
+
+        lastRainState = currentlyRaining;
+    }
+
+    private void playNextRainSound(World world, Player player, int playerX, int playerY, int playerZ, float intensity) {
         boolean isUnderCover = isPlayerUnderCover(world, playerX, playerY, playerZ);
-        Set<String> soundsToPlay = findRainSounds(world, playerX, playerY, playerZ, isUnderCover);
+        List<SoundCandidate> soundCandidates = findRainSounds(world, playerX, playerY, playerZ, isUnderCover);
 
-        // Limit concurrent sounds and filter out sounds on cooldown
-        int soundsPlayed = 0;
-        for (String soundToPlay : soundsToPlay) {
-            if (soundsPlayed >= MAX_CONCURRENT_SOUNDS) {
-                break;
-            }
+        if (soundCandidates.isEmpty()) {
+            return;
+        }
 
-            if (soundToPlay != null && !soundToPlay.equals("ambient.weather.rain") && !soundCooldowns.containsKey(soundToPlay)) {
-                GameSettings settings = mc.gameSettings;
+        // Pick a random sound candidate for natural bouncing
+        SoundCandidate candidate = soundCandidates.get(RANDOM.nextInt(soundCandidates.size()));
 
-                OptionFloat masterRainVolume = getFloatOption(settings, "betterthanrain.masterRainVolume");
-                OptionFloat muffledVolume = getFloatOption(settings, "betterthanrain.muffledVolume");
-                OptionBoolean useWeatherSounds = getBooleanOption(settings, "betterthanrain.useWeatherSounds");
+        if (shouldPlaySound(candidate.soundName, candidate.position)) {
+            GameSettings settings = Minecraft.getMinecraft().gameSettings;
+            playRainSound(world, player, candidate, settings, intensity, isUnderCover);
+        }
+    }
 
-                float baseVolume = 0.3f * world.weatherManager.getWeatherIntensity() * world.weatherManager.getWeatherPower();
-                float volume = baseVolume * (masterRainVolume != null ? masterRainVolume.value : 1.0f);
+    private void updateActiveSounds() {
+        long currentTime = System.currentTimeMillis();
+        activeSounds.entrySet().removeIf(entry -> {
+            SoundData sound = entry.getValue();
+            return currentTime - sound.playTime > sound.cooldown * 50; // Convert ticks to milliseconds
+        });
+    }
 
-                float materialMultiplier = getMaterialVolumeMultiplier(soundToPlay, settings);
-                volume *= materialMultiplier;
+    private boolean shouldPlaySound(String soundName, BlockPosition position) {
+        if (soundName == null || soundName.equals("ambient.weather.rain")) {
+            return false;
+        }
 
-                if (isUnderCover) {
-                    volume *= (muffledVolume != null ? muffledVolume.value : 1.0f);
-                }
+        // Check if this specific position is on cooldown
+        String positionKey = soundName + "_" + position.x + "_" + position.y + "_" + position.z;
+        return !activeSounds.containsKey(positionKey);
+    }
 
-                volume *= GLOBAL_GAIN;
+    private void playRainSound(World world, Player player, SoundCandidate candidate,
+                              GameSettings settings, float intensity, boolean isUnderCover) {
 
-                float pitch = 0.8f + RANDOM.nextFloat() * 0.4f;
+        float baseVolume = calculateBaseVolume(intensity);
 
-                SoundCategory soundCategory = (useWeatherSounds != null && useWeatherSounds.value) ?
-                    SoundCategory.WORLD_SOUNDS : SoundCategory.WEATHER_SOUNDS;
+        // Calculate distance-based volume
+        float distance = (float) Math.sqrt(
+            (player.x - candidate.position.x) * (player.x - candidate.position.x) +
+            (player.y - candidate.position.y) * (player.y - candidate.position.y) +
+            (player.z - candidate.position.z) * (player.z - candidate.position.z)
+        );
 
-                world.playSoundEffect(null, soundCategory,
-                    player.x, player.y, player.z, soundToPlay, volume, pitch);
+        // Apply distance falloff (closer = louder)
+        float distanceMultiplier = Math.max(0.1f, 1.0f - (distance / (SEARCH_RADIUS * 2.0f)));
+        baseVolume *= distanceMultiplier;
 
-                // Add cooldown for this specific sound type
-                soundCooldowns.put(soundToPlay, RANDOM.nextInt(SOUND_COOLDOWN_MAX - SOUND_COOLDOWN_MIN + 1) + SOUND_COOLDOWN_MIN);
-                soundsPlayed++;
+        float volume = applyVolumeModifiers(baseVolume, candidate.soundName, settings, isUnderCover);
+
+        if (volume <= 0.01f) {
+            return; // Don't play inaudible sounds
+        }
+
+        float pitch = 0.8f + RANDOM.nextFloat() * 0.4f;
+
+        // Use cached sound category
+        SoundCategory soundCategory = getSoundCategory(settings);
+
+        // Play sound at the exact block position (not random!)
+        world.playSoundEffect(null, soundCategory,
+                            candidate.position.x + 0.5, candidate.position.y + 0.5, candidate.position.z + 0.5,
+                            candidate.soundName, volume, pitch);
+
+        // Track this sound with its position
+        int cooldown = RANDOM.nextInt(SOUND_COOLDOWN_MAX - SOUND_COOLDOWN_MIN + 1) + SOUND_COOLDOWN_MIN;
+        String positionKey = candidate.soundName + "_" + candidate.position.x + "_" + candidate.position.y + "_" + candidate.position.z;
+        activeSounds.put(positionKey, new SoundData(cooldown));
+    }
+
+    private float calculateBaseVolume(float intensity) {
+        return 0.3f * intensity * intensity; // Quadratic scaling for more natural feel
+    }
+
+    private float applyVolumeModifiers(float baseVolume, String soundName, GameSettings settings, boolean isUnderCover) {
+        float volume = baseVolume;
+
+        // Apply master rain volume
+        OptionFloat masterVolume = getCachedFloatOption(settings, "betterthanrain.masterRainVolume");
+        if (masterVolume != null) {
+            volume *= masterVolume.value;
+        }
+
+        // Apply material-specific volume
+        volume *= getMaterialVolumeMultiplier(soundName, settings);
+
+        // Apply muffled volume if under cover
+        if (isUnderCover) {
+            OptionFloat muffledVolume = getCachedFloatOption(settings, "betterthanrain.muffledVolume");
+            if (muffledVolume != null) {
+                volume *= muffledVolume.value;
             }
         }
+
+        return volume * GLOBAL_GAIN;
+    }
+
+    private SoundCategory getSoundCategory(GameSettings settings) {
+        OptionBoolean useWeatherSounds = getCachedBooleanOption(settings, "betterthanrain.useWeatherSounds");
+        return (useWeatherSounds != null && useWeatherSounds.value) ?
+            SoundCategory.WORLD_SOUNDS : SoundCategory.WEATHER_SOUNDS;
     }
 
     private boolean isRaining(World world) {
         Weather currentWeather = world.getCurrentWeather();
-        if (currentWeather == null) {
-            return false;
-        }
-
-        return currentWeather.isPrecipitation && world.weatherManager.getWeatherIntensity() > 0.1f;
+        return currentWeather != null &&
+               currentWeather.isPrecipitation &&
+               world.weatherManager.getWeatherIntensity() > MIN_WEATHER_INTENSITY;
     }
 
     private boolean isPlayerUnderCover(World world, int playerX, int playerY, int playerZ) {
@@ -116,6 +253,7 @@ public class RainSoundManager {
             return false;
         }
 
+        // Use a more efficient single-pass check
         for (int y = playerY + 1; y <= rainLevel; y++) {
             int blockId = world.getBlockId(playerX, y, playerZ);
             if (blockId > 0 && blockId < Blocks.solid.length) {
@@ -124,33 +262,30 @@ public class RainSoundManager {
                 }
 
                 Block<?> block = Blocks.blocksList[blockId];
-                if (block != null && !block.isSolidRender()) {
-                    continue;
+                if (block != null && block.isSolidRender()) {
+                    return true;
                 }
-
-                return true;
             }
         }
 
         return false;
     }
 
-    private Set<String> findRainSounds(World world, int centerX, int centerY, int centerZ, boolean isUnderCover) {
-        int searchRadius = 4;
-        Set<String> foundSounds = new HashSet<>();
+    private List<SoundCandidate> findRainSounds(World world, int centerX, int centerY, int centerZ, boolean isUnderCover) {
+        List<SoundCandidate> candidates = new ArrayList<>();
 
-        for (int x = centerX - searchRadius; x <= centerX + searchRadius; x++) {
-            for (int z = centerZ - searchRadius; z <= centerZ + searchRadius; z++) {
+        // Simple area scan for all valid sound blocks
+        for (int x = centerX - SEARCH_RADIUS; x <= centerX + SEARCH_RADIUS; x++) {
+            for (int z = centerZ - SEARCH_RADIUS; z <= centerZ + SEARCH_RADIUS; z++) {
                 int surfaceY = world.findTopSolidBlock(x, z);
 
-                if (Math.abs(surfaceY - centerY) > 5) {
+                if (Math.abs(surfaceY - centerY) > MAX_SURFACE_Y_DIFF) {
                     continue;
                 }
 
                 if (world.canBlockBeRainedOn(x, surfaceY, z)) {
                     int blockId = world.getBlockId(x, surfaceY - 1, z);
 
-                    // Special handling for glass
                     boolean effectivelyUnderCover = isUnderCover;
                     if (BlockTypeMappings.GLASS_BLOCKS.contains(blockId)) {
                         effectivelyUnderCover = (centerY < surfaceY - 1);
@@ -159,21 +294,13 @@ public class RainSoundManager {
                     String sound = getRainSoundForBlock(blockId, effectivelyUnderCover);
 
                     if (sound != null && !sound.equals("ambient.weather.rain")) {
-                        foundSounds.add(sound);
-
-                        if (foundSounds.size() >= MAX_CONCURRENT_SOUNDS) {
-                            break;
-                        }
+                        candidates.add(new SoundCandidate(sound, new BlockPosition(x, surfaceY, z)));
                     }
                 }
             }
-
-            if (foundSounds.size() >= MAX_CONCURRENT_SOUNDS) {
-                break;
-            }
         }
 
-        return foundSounds;
+        return candidates;
     }
 
     private String getRainSoundForBlock(int blockId, boolean isUnderCover) {
@@ -181,14 +308,14 @@ public class RainSoundManager {
             return null;
         }
 
+        // Optimized material detection with early returns
         if (BlockTypeMappings.METAL_BLOCKS.contains(blockId)) {
             return isUnderCover ? BetterThanRainSounds.RAIN_SOUNDS_METAL_MUFFLED
                                 : BetterThanRainSounds.RAIN_SOUNDS_METAL;
         }
 
-		if (BlockTypeMappings.METAL_BLOCKS_THIN.contains(blockId)) {
-            return isUnderCover ? BetterThanRainSounds.RAIN_SOUNDS_METAL_THIN
-                                : null; // No normal thin metal sounds for now
+        if (BlockTypeMappings.METAL_BLOCKS_THIN.contains(blockId)) {
+            return isUnderCover ? BetterThanRainSounds.RAIN_SOUNDS_METAL_THIN : null;
         }
 
         if (BlockTypeMappings.GLASS_BLOCKS.contains(blockId)) {
@@ -201,11 +328,11 @@ public class RainSoundManager {
                                 : BetterThanRainSounds.RAIN_SOUNDS_FABRIC;
         }
 
-		if (BlockTypeMappings.FABRIC_BLOCKS_THIN.contains(blockId)) {
-            return isUnderCover ? BetterThanRainSounds.RAIN_SOUNDS_FABRIC_THIN
-                                : null; // No normal thin fabric sounds for now
+        if (BlockTypeMappings.FABRIC_BLOCKS_THIN.contains(blockId)) {
+            return isUnderCover ? BetterThanRainSounds.RAIN_SOUNDS_FABRIC_THIN : null;
         }
 
+        // Special blocks that always play regardless of cover
         if (BlockTypeMappings.FOLIAGE_BLOCKS.contains(blockId)) {
             return BetterThanRainSounds.RAIN_SOUNDS_FOLIAGE;
         }
@@ -224,12 +351,11 @@ public class RainSoundManager {
 
         if (BlockTypeMappings.STONE_BLOCKS.contains(blockId)) {
             return isUnderCover ? BetterThanRainSounds.RAIN_SOUNDS_STONE_MUFFLED
-								: BetterThanRainSounds.RAIN_SOUNDS_STONE;
+                                : BetterThanRainSounds.RAIN_SOUNDS_STONE;
         }
 
         if (BlockTypeMappings.WOOD_BLOCKS.contains(blockId)) {
-            return isUnderCover ? BetterThanRainSounds.RAIN_SOUNDS_WOOD_MUFFLED
-							    : null; // No normal wood sounds for now
+            return isUnderCover ? BetterThanRainSounds.RAIN_SOUNDS_WOOD_MUFFLED : null;
         }
 
         if (BlockTypeMappings.PLASTIC_BLOCKS.contains(blockId)) {
@@ -239,63 +365,66 @@ public class RainSoundManager {
         return null;
     }
 
-    private static OptionFloat getFloatOption(GameSettings settings, String name) {
-        for (net.minecraft.client.option.Option<?> option : GameSettings.options) {
-            if (option instanceof OptionFloat && option.name.equals(name)) {
-                return (OptionFloat) option;
+    // Optimized option caching methods
+    private static OptionFloat getCachedFloatOption(GameSettings settings, String name) {
+        return cachedFloatOptions.computeIfAbsent(name, key -> {
+            for (net.minecraft.client.option.Option<?> option : GameSettings.options) {
+                if (option instanceof OptionFloat && option.name.equals(key)) {
+                    return (OptionFloat) option;
+                }
             }
-        }
-        return null;
+            return null;
+        });
     }
 
-    private static OptionBoolean getBooleanOption(GameSettings settings, String name) {
-        for (net.minecraft.client.option.Option<?> option : GameSettings.options) {
-            if (option instanceof OptionBoolean && option.name.equals(name)) {
-                return (OptionBoolean) option;
+    private static OptionBoolean getCachedBooleanOption(GameSettings settings, String name) {
+        return cachedBooleanOptions.computeIfAbsent(name, key -> {
+            for (net.minecraft.client.option.Option<?> option : GameSettings.options) {
+                if (option instanceof OptionBoolean && option.name.equals(key)) {
+                    return (OptionBoolean) option;
+                }
             }
-        }
-        return null;
+            return null;
+        });
     }
 
     private float getMaterialVolumeMultiplier(String soundToPlay, GameSettings settings) {
-        if (soundToPlay.contains("rain_sounds_metal")) {
-            OptionFloat opt = getFloatOption(settings, "betterthanrain.metalRainVolume");
-            return opt != null ? opt.value : 1.0f;
-        } else if (soundToPlay.contains("rain_sounds_metal_thin")) {
-            OptionFloat opt = getFloatOption(settings, "betterthanrain.metalRainVolume");
-            return opt != null ? opt.value : 1.0f;
-        } else if (soundToPlay.contains("rain_sounds_glass")) {
-            OptionFloat opt = getFloatOption(settings, "betterthanrain.glassRainVolume");
-            return opt != null ? opt.value : 1.0f;
-        } else if (soundToPlay.contains("rain_sounds_fabric")) {
-            OptionFloat opt = getFloatOption(settings, "betterthanrain.fabricRainVolume");
-            return opt != null ? opt.value : 1.0f;
-		} else if (soundToPlay.contains("rain_sounds_fabric_thin")) {
-            OptionFloat opt = getFloatOption(settings, "betterthanrain.fabricRainVolume");
-            return opt != null ? opt.value : 1.0f;
-        } else if (soundToPlay.contains("rain_sounds_lava")) {
-            OptionFloat opt = getFloatOption(settings, "betterthanrain.lavaRainVolume");
-            return opt != null ? opt.value : 1.0f;
-        } else if (soundToPlay.contains("rain_sounds_foliage")) {
-            OptionFloat opt = getFloatOption(settings, "betterthanrain.foliageRainVolume");
-            return opt != null ? opt.value : 1.0f;
-        } else if (soundToPlay.contains("rain_sounds_water")) {
-            OptionFloat opt = getFloatOption(settings, "betterthanrain.waterRainVolume");
-            return opt != null ? opt.value : 1.0f;
-        } else if (soundToPlay.contains("rain_sounds_noteblock")) {
-            OptionFloat opt = getFloatOption(settings, "betterthanrain.noteblockRainVolume");
-            return opt != null ? opt.value : 1.0f;
-        } else if (soundToPlay.contains("rain_sounds_stone")) {
-            OptionFloat opt = getFloatOption(settings, "betterthanrain.stoneRainVolume");
-            return opt != null ? opt.value : 1.0f;
-        } else if (soundToPlay.contains("rain_sounds_wood")) {
-            OptionFloat opt = getFloatOption(settings, "betterthanrain.woodRainVolume");
-            return opt != null ? opt.value : 1.0f;
-        } else if (soundToPlay.contains("rain_sounds_plastic")) {
-            OptionFloat opt = getFloatOption(settings, "betterthanrain.plasticRainVolume");
+        // Use a lookup table for better performance
+        String optionName = getMaterialVolumeOptionName(soundToPlay);
+        if (optionName != null) {
+            OptionFloat opt = getCachedFloatOption(settings, optionName);
             return opt != null ? opt.value : 1.0f;
         }
-
         return 1.0f;
+    }
+
+    private String getMaterialVolumeOptionName(String soundToPlay) {
+        if (soundToPlay.contains("metal")) return "betterthanrain.metalRainVolume";
+        if (soundToPlay.contains("glass")) return "betterthanrain.glassRainVolume";
+        if (soundToPlay.contains("fabric")) return "betterthanrain.fabricRainVolume";
+        if (soundToPlay.contains("lava")) return "betterthanrain.lavaRainVolume";
+        if (soundToPlay.contains("foliage")) return "betterthanrain.foliageRainVolume";
+        if (soundToPlay.contains("water")) return "betterthanrain.waterRainVolume";
+        if (soundToPlay.contains("noteblock")) return "betterthanrain.noteblockRainVolume";
+        if (soundToPlay.contains("stone")) return "betterthanrain.stoneRainVolume";
+        if (soundToPlay.contains("wood")) return "betterthanrain.woodRainVolume";
+        if (soundToPlay.contains("plastic")) return "betterthanrain.plasticRainVolume";
+        return null;
+    }
+
+    // Cleanup method for better memory management
+    private static void cleanup() {
+        activeSounds.clear();
+        checkedPositions.clear();
+        // Don't clear option caches as they should persist
+    }
+
+    // Public method to force cleanup (useful for world changes)
+    public static void forceCleanup() {
+        cleanup();
+        cachedFloatOptions.clear();
+        cachedBooleanOptions.clear();
+        lastRainState = false;
+        tickCounter = 0;
     }
 }
