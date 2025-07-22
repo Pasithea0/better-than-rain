@@ -81,4 +81,32 @@ public class BlockTypeMappings {
 		// METAL_BLOCKS_THIN
 		// FABRIC_BLOCKS_THIN
     }
+
+    public enum MaterialType {
+        METAL,
+        GLASS,
+        FABRIC,
+        FOLIAGE,
+        WATER,
+        LAVA,
+        NOTEBLOCK,
+        STONE,
+        WOOD,
+        PLASTIC,
+        OTHER
+    }
+
+    public static MaterialType getMaterialType(int blockId) {
+        if (METAL_BLOCKS.contains(blockId) || METAL_BLOCKS_THIN.contains(blockId)) return MaterialType.METAL;
+        if (GLASS_BLOCKS.contains(blockId)) return MaterialType.GLASS;
+        if (FABRIC_BLOCKS.contains(blockId) || FABRIC_BLOCKS_THIN.contains(blockId)) return MaterialType.FABRIC;
+        if (FOLIAGE_BLOCKS.contains(blockId)) return MaterialType.FOLIAGE;
+        if (WATER_BLOCKS.contains(blockId)) return MaterialType.WATER;
+        if (LAVA_BLOCKS.contains(blockId)) return MaterialType.LAVA;
+        if (NOTEBLOCK_BLOCKS.contains(blockId)) return MaterialType.NOTEBLOCK;
+        if (STONE_BLOCKS.contains(blockId)) return MaterialType.STONE;
+        if (WOOD_BLOCKS.contains(blockId)) return MaterialType.WOOD;
+        if (PLASTIC_BLOCKS.contains(blockId)) return MaterialType.PLASTIC;
+        return MaterialType.OTHER;
+    }
 }

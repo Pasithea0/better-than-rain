@@ -133,8 +133,8 @@ public class RainSoundManager {
     }
 
     private void playNextRainSound(World world, Player player, int playerX, int playerY, int playerZ, float intensity) {
-        boolean isUnderCover = isPlayerUnderCover(world, playerX, playerY, playerZ);
-        List<SoundCandidate> soundCandidates = findRainSounds(world, playerX, playerY, playerZ, isUnderCover);
+        List<Integer> coveringBlocks = getCoveringBlocks(world, playerX, playerY, playerZ);
+        List<SoundCandidate> soundCandidates = findRainSounds(world, playerX, playerY, playerZ, coveringBlocks);
 
         if (soundCandidates.isEmpty()) {
             return;
@@ -145,6 +145,7 @@ public class RainSoundManager {
 
         if (shouldPlaySound(candidate.soundName, candidate.position)) {
             GameSettings settings = Minecraft.getMinecraft().gameSettings;
+            boolean isUnderCover = !coveringBlocks.isEmpty();
             playRainSound(world, player, candidate, settings, intensity, isUnderCover);
         }
     }
@@ -245,34 +246,35 @@ public class RainSoundManager {
                world.weatherManager.getWeatherIntensity() > MIN_WEATHER_INTENSITY;
     }
 
-    private boolean isPlayerUnderCover(World world, int playerX, int playerY, int playerZ) {
+    private List<Integer> getCoveringBlocks(World world, int playerX, int playerY, int playerZ) {
+        List<Integer> coveringBlocks = new ArrayList<>();
         int rainLevel = world.findTopSolidBlock(playerX, playerZ);
 
         if (playerY >= rainLevel - 1) {
-            return false;
+            return coveringBlocks; // Empty list means not under cover
         }
 
-        // Use a more efficient single-pass check
         for (int y = playerY + 1; y <= rainLevel; y++) {
             int blockId = world.getBlockId(playerX, y, playerZ);
             if (blockId > 0 && blockId < Blocks.solid.length) {
                 if (Blocks.solid[blockId]) {
-                    return true;
-                }
-
-                Block<?> block = Blocks.blocksList[blockId];
-                if (block != null && block.isSolidRender()) {
-                    return true;
+                    coveringBlocks.add(blockId);
+                } else {
+                    Block<?> block = Blocks.blocksList[blockId];
+                    if (block != null && block.isSolidRender()) {
+                        coveringBlocks.add(blockId);
+                    }
                 }
             }
         }
 
-        return false;
+        return coveringBlocks;
     }
 
-    private List<SoundCandidate> findRainSounds(World world, int centerX, int centerY, int centerZ, boolean isUnderCover) {
+    private List<SoundCandidate> findRainSounds(World world, int centerX, int centerY, int centerZ, List<Integer> coveringBlocks) {
         List<SoundCandidate> candidates = new ArrayList<>();
         int radiusSquared = SEARCH_RADIUS * SEARCH_RADIUS;
+        boolean isUnderCover = !coveringBlocks.isEmpty();
 
         // Search in a spherical volume around the player
         for (int x = centerX - SEARCH_RADIUS; x <= centerX + SEARCH_RADIUS; x++) {
@@ -298,10 +300,10 @@ public class RainSoundManager {
                     if (world.canBlockBeRainedOn(x, surfaceY, z)) {
                         int blockId = world.getBlockId(x, y, z);
 
-                        boolean effectivelyUnderCover = isUnderCover;
-                        if (BlockTypeMappings.GLASS_BLOCKS.contains(blockId)) {
-                            effectivelyUnderCover = (centerY < surfaceY - 1);
-                        }
+                        // Check if we're specifically under this type of block
+                        boolean effectivelyUnderCover = isUnderCover &&
+                            coveringBlocks.stream().anyMatch(coverId ->
+                                BlockTypeMappings.getMaterialType(coverId) == BlockTypeMappings.getMaterialType(blockId));
 
                         String sound = getRainSoundForBlock(blockId, effectivelyUnderCover);
 
