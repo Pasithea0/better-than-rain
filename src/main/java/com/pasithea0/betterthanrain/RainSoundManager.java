@@ -21,7 +21,6 @@ public class RainSoundManager {
 
     // Performance constants
     private static final int SEARCH_RADIUS = 6;
-    private static final int MAX_SURFACE_Y_DIFF = 10;
     private static final float MIN_WEATHER_INTENSITY = 0.1f;
     private static final float GLOBAL_GAIN = 2.0f;
 
@@ -181,7 +180,7 @@ public class RainSoundManager {
         );
 
         // Apply distance falloff (closer = louder)
-        float distanceMultiplier = Math.max(0.1f, 1.0f - (distance / (SEARCH_RADIUS * 2.0f)));
+        float distanceMultiplier = Math.max(0.1f, 1.0f - (distance / SEARCH_RADIUS));
         baseVolume *= distanceMultiplier;
 
         float volume = applyVolumeModifiers(baseVolume, candidate.soundName, settings, isUnderCover);
@@ -273,28 +272,42 @@ public class RainSoundManager {
 
     private List<SoundCandidate> findRainSounds(World world, int centerX, int centerY, int centerZ, boolean isUnderCover) {
         List<SoundCandidate> candidates = new ArrayList<>();
+        int radiusSquared = SEARCH_RADIUS * SEARCH_RADIUS;
 
-        // Simple area scan for all valid sound blocks
+        // Search in a spherical volume around the player
         for (int x = centerX - SEARCH_RADIUS; x <= centerX + SEARCH_RADIUS; x++) {
             for (int z = centerZ - SEARCH_RADIUS; z <= centerZ + SEARCH_RADIUS; z++) {
-                int surfaceY = world.findTopSolidBlock(x, z);
+                for (int y = centerY - SEARCH_RADIUS; y <= centerY + SEARCH_RADIUS; y++) {
+                    // Check if block is within spherical radius
+                    int dx = x - centerX;
+                    int dy = y - centerY;
+                    int dz = z - centerZ;
+                    int distanceSquared = dx*dx + dy*dy + dz*dz;
 
-                if (Math.abs(surfaceY - centerY) > MAX_SURFACE_Y_DIFF) {
-                    continue;
-                }
-
-                if (world.canBlockBeRainedOn(x, surfaceY, z)) {
-                    int blockId = world.getBlockId(x, surfaceY - 1, z);
-
-                    boolean effectivelyUnderCover = isUnderCover;
-                    if (BlockTypeMappings.GLASS_BLOCKS.contains(blockId)) {
-                        effectivelyUnderCover = (centerY < surfaceY - 1);
+                    if (distanceSquared > radiusSquared) {
+                        continue;
                     }
 
-                    String sound = getRainSoundForBlock(blockId, effectivelyUnderCover);
+                    int surfaceY = world.findTopSolidBlock(x, z);
 
-                    if (sound != null && !sound.equals("ambient.weather.rain")) {
-                        candidates.add(new SoundCandidate(sound, new BlockPosition(x, surfaceY, z)));
+                    // Only check blocks that can be rained on at their surface level
+                    if (y != surfaceY - 1) {
+                        continue;
+                    }
+
+                    if (world.canBlockBeRainedOn(x, surfaceY, z)) {
+                        int blockId = world.getBlockId(x, y, z);
+
+                        boolean effectivelyUnderCover = isUnderCover;
+                        if (BlockTypeMappings.GLASS_BLOCKS.contains(blockId)) {
+                            effectivelyUnderCover = (centerY < surfaceY - 1);
+                        }
+
+                        String sound = getRainSoundForBlock(blockId, effectivelyUnderCover);
+
+                        if (sound != null && !sound.equals("ambient.weather.rain")) {
+                            candidates.add(new SoundCandidate(sound, new BlockPosition(x, y, z)));
+                        }
                     }
                 }
             }
