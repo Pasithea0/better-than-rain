@@ -25,20 +25,18 @@ public class RainSoundManager {
     private static final float GLOBAL_GAIN = 2.0f;
 
     // Sound management constants
-    private static final int SOUND_COOLDOWN_MIN = 20;
+    private static final int SOUND_COOLDOWN_MIN = 30;
     private static final int SOUND_COOLDOWN_MAX = 50;
     private static final int TICK_INTERVAL = 3; // Faster for bouncing sounds
 
     // Cached data structures
-    private static final Map<String, SoundData> activeSounds = new HashMap<>();
-    private static final Set<BlockPosition> checkedPositions = new HashSet<>();
+    private static final Map<String, SoundData> activeSoundTypes = new HashMap<>();
     private static final Map<String, OptionFloat> cachedFloatOptions = new HashMap<>();
     private static final Map<String, OptionBoolean> cachedBooleanOptions = new HashMap<>();
 
     private static int tickCounter = 0;
     private static boolean lastRainState = false;
 
-    // Sound data class for better management
     private static class SoundData {
         final int cooldown;
         final long playTime;
@@ -125,7 +123,7 @@ public class RainSoundManager {
         int playerZ = (int) Math.floor(player.z);
 
         // Check if we need to play a new sound (bouncing effect)
-        if (activeSounds.isEmpty()) {
+        if (activeSoundTypes.isEmpty()) {
             playNextRainSound(world, player, playerX, playerY, playerZ, currentIntensity);
         }
 
@@ -135,24 +133,33 @@ public class RainSoundManager {
     private void playNextRainSound(World world, Player player, int playerX, int playerY, int playerZ, float intensity) {
         List<Integer> coveringBlocks = getCoveringBlocks(world, playerX, playerY, playerZ);
         List<SoundCandidate> soundCandidates = findRainSounds(world, playerX, playerY, playerZ, coveringBlocks);
-
         if (soundCandidates.isEmpty()) {
             return;
         }
-
-        // Pick a random sound candidate for natural bouncing
-        SoundCandidate candidate = soundCandidates.get(RANDOM.nextInt(soundCandidates.size()));
-
-        if (shouldPlaySound(candidate.soundName, candidate.position)) {
-            GameSettings settings = Minecraft.getMinecraft().gameSettings;
-            boolean isUnderCover = !coveringBlocks.isEmpty();
-            playRainSound(world, player, candidate, settings, intensity, isUnderCover);
+        // Group candidates by material type
+        Map<String, List<SoundCandidate>> candidatesByType = new HashMap<>();
+        for (SoundCandidate candidate : soundCandidates) {
+            String materialType = getMaterialType(candidate.soundName);
+            if (materialType != null) {
+                candidatesByType.computeIfAbsent(materialType, k -> new ArrayList<>()).add(candidate);
+            }
+        }
+        // Play one sound per available material type
+        for (List<SoundCandidate> candidates : candidatesByType.values()) {
+            if (!candidates.isEmpty()) {
+                SoundCandidate candidate = candidates.get(RANDOM.nextInt(candidates.size()));
+                if (shouldPlaySound(candidate.soundName, candidate.position)) {
+                    GameSettings settings = Minecraft.getMinecraft().gameSettings;
+                    boolean isUnderCover = !coveringBlocks.isEmpty();
+                    playRainSound(world, player, candidate, settings, intensity, isUnderCover);
+                }
+            }
         }
     }
 
     private void updateActiveSounds() {
         long currentTime = System.currentTimeMillis();
-        activeSounds.entrySet().removeIf(entry -> {
+        activeSoundTypes.entrySet().removeIf(entry -> {
             SoundData sound = entry.getValue();
             return currentTime - sound.playTime > sound.cooldown * 50; // Convert ticks to milliseconds
         });
@@ -162,10 +169,10 @@ public class RainSoundManager {
         if (soundName == null || soundName.equals("ambient.weather.rain")) {
             return false;
         }
-
-        // Check if this specific position is on cooldown
-        String positionKey = soundName + "_" + position.x + "_" + position.y + "_" + position.z;
-        return !activeSounds.containsKey(positionKey);
+        String materialType = getMaterialType(soundName);
+        if (materialType == null) return false;
+        // Only check if this material type is on cooldown
+        return !activeSoundTypes.containsKey(materialType);
     }
 
     private void playRainSound(World world, Player player, SoundCandidate candidate,
@@ -200,10 +207,12 @@ public class RainSoundManager {
                             candidate.position.x + 0.5, candidate.position.y + 0.5, candidate.position.z + 0.5,
                             candidate.soundName, volume, pitch);
 
-        // Track this sound with its position
-        int cooldown = RANDOM.nextInt(SOUND_COOLDOWN_MAX - SOUND_COOLDOWN_MIN + 1) + SOUND_COOLDOWN_MIN;
-        String positionKey = candidate.soundName + "_" + candidate.position.x + "_" + candidate.position.y + "_" + candidate.position.z;
-        activeSounds.put(positionKey, new SoundData(cooldown));
+        // Track this sound by material type
+        String materialType = getMaterialType(candidate.soundName);
+        if (materialType != null) {
+            int cooldown = RANDOM.nextInt(SOUND_COOLDOWN_MAX - SOUND_COOLDOWN_MIN + 1) + SOUND_COOLDOWN_MIN;
+            activeSoundTypes.put(materialType, new SoundData(cooldown));
+        }
     }
 
     private float calculateBaseVolume(float intensity) {
@@ -347,7 +356,6 @@ public class RainSoundManager {
             return isUnderCover ? BetterThanRainSounds.RAIN_SOUNDS_FABRIC_THIN : null;
         }
 
-        // Special blocks that always play regardless of cover
         if (BlockTypeMappings.FOLIAGE_BLOCKS.contains(blockId)) {
             return BetterThanRainSounds.RAIN_SOUNDS_FOLIAGE;
         }
@@ -427,10 +435,25 @@ public class RainSoundManager {
         return null;
     }
 
+    // Helper to get material type string from sound name
+    private String getMaterialType(String soundName) {
+        if (soundName == null) return null;
+        if (soundName.contains("metal")) return "metal";
+        if (soundName.contains("glass")) return "glass";
+        if (soundName.contains("fabric")) return "fabric";
+        if (soundName.contains("lava")) return "lava";
+        if (soundName.contains("foliage")) return "foliage";
+        if (soundName.contains("water")) return "water";
+        if (soundName.contains("noteblock")) return "noteblock";
+        if (soundName.contains("stone")) return "stone";
+        if (soundName.contains("wood")) return "wood";
+        if (soundName.contains("plastic")) return "plastic";
+        return null;
+    }
+
     // Cleanup method for better memory management
     private static void cleanup() {
-        activeSounds.clear();
-        checkedPositions.clear();
+        activeSoundTypes.clear();
         // Don't clear option caches as they should persist
     }
 
