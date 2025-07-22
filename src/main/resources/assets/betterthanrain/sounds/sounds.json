@@ -83,8 +83,7 @@
     "sounds": [
       "rain_sounds_water_1.wav",
       "rain_sounds_water_2.wav",
-      "rain_sounds_water_3.wav",
-      "rain_sounds_water_4.wav"
+      "rain_sounds_water_3.wav"
     ]
   },
   "rain_sounds_stone": {
