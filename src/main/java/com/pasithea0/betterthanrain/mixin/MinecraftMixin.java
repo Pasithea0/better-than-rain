@@ -12,7 +12,13 @@ public class MinecraftMixin {
 
     @Inject(method = "runTick", at = @At("TAIL"))
     private void onRunTick(CallbackInfo ci) {
-        // Call our rain sound manager every tick
-        RainSoundManager.tick((Minecraft)(Object)this);
+        // Only call the rain sound manager if it's actually raining
+        Minecraft mc = (Minecraft)(Object)this;
+        if (mc.currentWorld != null && mc.thePlayer != null) {
+            net.minecraft.core.world.weather.Weather currentWeather = mc.currentWorld.getCurrentWeather();
+            if (currentWeather != null && currentWeather.isPrecipitation && mc.currentWorld.weatherManager.getWeatherIntensity() > 0.1f) {
+                RainSoundManager.tick(mc);
+            }
+        }
     }
 }
