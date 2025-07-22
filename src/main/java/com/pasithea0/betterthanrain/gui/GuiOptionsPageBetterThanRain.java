@@ -11,29 +11,47 @@ import net.minecraft.client.gui.options.data.OptionsPages;
 import net.minecraft.client.option.GameSettings;
 import net.minecraft.core.item.Items;
 import turniplabs.halplibe.util.ClientStartEntrypoint;
-import com.pasithea0.betterthanrain.settings.IBetterThanRainOptions;
+import net.minecraft.client.option.OptionFloat;
+import net.minecraft.client.option.OptionBoolean;
 
 public class GuiOptionsPageBetterThanRain implements ClientStartEntrypoint {
     public static final GameSettings gameSettings = Minecraft.getMinecraft().gameSettings;
-    public static final IBetterThanRainOptions rainOptions = (IBetterThanRainOptions) gameSettings;
+
+    private static OptionFloat getFloatOption(String name) {
+        for (net.minecraft.client.option.Option<?> option : GameSettings.options) {
+            if (option instanceof OptionFloat && option.name.equals(name)) {
+                return (OptionFloat) option;
+            }
+        }
+        return null;
+    }
+
+    private static OptionBoolean getBooleanOption(String name) {
+        for (net.minecraft.client.option.Option<?> option : GameSettings.options) {
+            if (option instanceof OptionBoolean && option.name.equals(name)) {
+                return (OptionBoolean) option;
+            }
+        }
+        return null;
+    }
 
     public static final OptionsPage BetterThanRainPage = OptionsPages.register(new OptionsPage("betterthanrain.options.title", Items.BUCKET_WATER.getDefaultStack())
             .withComponent(
                     new OptionsCategory("betterthanrain.options.master")
-                            .withComponent(new FloatOptionComponent(rainOptions.betterthanrain$getMasterRainVolume()))
-                            .withComponent(new FloatOptionComponent(rainOptions.betterthanrain$getMuffledVolume()))
-                            .withComponent(new BooleanOptionComponent(rainOptions.betterthanrain$getUseWeatherSounds())))
+                            .withComponent(new FloatOptionComponent(getFloatOption("betterthanrain.masterRainVolume")))
+                            .withComponent(new FloatOptionComponent(getFloatOption("betterthanrain.muffledVolume")))
+                            .withComponent(new BooleanOptionComponent(getBooleanOption("betterthanrain.useWeatherSounds"))))
             .withComponent(new OptionsCategory("betterthanrain.options.materials")
-                    .withComponent(new FloatOptionComponent(rainOptions.betterthanrain$getMetalRainVolume()))
-                    .withComponent(new FloatOptionComponent(rainOptions.betterthanrain$getGlassRainVolume()))
-                    .withComponent(new FloatOptionComponent(rainOptions.betterthanrain$getFabricRainVolume()))
-                    .withComponent(new FloatOptionComponent(rainOptions.betterthanrain$getStoneRainVolume()))
-                    .withComponent(new FloatOptionComponent(rainOptions.betterthanrain$getWoodRainVolume()))
-                    .withComponent(new FloatOptionComponent(rainOptions.betterthanrain$getPlasticRainVolume()))
-                    .withComponent(new FloatOptionComponent(rainOptions.betterthanrain$getLavaRainVolume()))
-                    .withComponent(new FloatOptionComponent(rainOptions.betterthanrain$getFoliageRainVolume()))
-                    .withComponent(new FloatOptionComponent(rainOptions.betterthanrain$getWaterRainVolume()))
-                    .withComponent(new FloatOptionComponent(rainOptions.betterthanrain$getNoteblockRainVolume()))));
+                    .withComponent(new FloatOptionComponent(getFloatOption("betterthanrain.metalRainVolume")))
+                    .withComponent(new FloatOptionComponent(getFloatOption("betterthanrain.glassRainVolume")))
+                    .withComponent(new FloatOptionComponent(getFloatOption("betterthanrain.fabricRainVolume")))
+                    .withComponent(new FloatOptionComponent(getFloatOption("betterthanrain.stoneRainVolume")))
+                    .withComponent(new FloatOptionComponent(getFloatOption("betterthanrain.woodRainVolume")))
+                    .withComponent(new FloatOptionComponent(getFloatOption("betterthanrain.plasticRainVolume")))
+                    .withComponent(new FloatOptionComponent(getFloatOption("betterthanrain.lavaRainVolume")))
+                    .withComponent(new FloatOptionComponent(getFloatOption("betterthanrain.foliageRainVolume")))
+                    .withComponent(new FloatOptionComponent(getFloatOption("betterthanrain.waterRainVolume")))
+                    .withComponent(new FloatOptionComponent(getFloatOption("betterthanrain.noteblockRainVolume")))));
 
     public static ScreenOptions betterThanRainOptionsScreen(final Screen parent) {
         return new ScreenOptions(parent, BetterThanRainPage);

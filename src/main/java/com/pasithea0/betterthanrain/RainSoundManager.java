@@ -1,6 +1,5 @@
 package com.pasithea0.betterthanrain;
 
-import com.pasithea0.betterthanrain.settings.IBetterThanRainOptions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.block.Block;
 import net.minecraft.core.block.Blocks;
@@ -8,6 +7,9 @@ import net.minecraft.core.entity.player.Player;
 import net.minecraft.core.sound.SoundCategory;
 import net.minecraft.core.world.World;
 import net.minecraft.core.world.weather.Weather;
+import net.minecraft.client.option.OptionBoolean;
+import net.minecraft.client.option.OptionFloat;
+import net.minecraft.client.option.GameSettings;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -65,23 +67,27 @@ public class RainSoundManager {
             }
 
             if (soundToPlay != null && !soundToPlay.equals("ambient.weather.rain") && !soundCooldowns.containsKey(soundToPlay)) {
-                IBetterThanRainOptions settings = (IBetterThanRainOptions) mc.gameSettings;
+                GameSettings settings = mc.gameSettings;
+
+                OptionFloat masterRainVolume = getFloatOption(settings, "betterthanrain.masterRainVolume");
+                OptionFloat muffledVolume = getFloatOption(settings, "betterthanrain.muffledVolume");
+                OptionBoolean useWeatherSounds = getBooleanOption(settings, "betterthanrain.useWeatherSounds");
 
                 float baseVolume = 0.3f * world.weatherManager.getWeatherIntensity() * world.weatherManager.getWeatherPower();
-                float volume = baseVolume * settings.betterthanrain$getMasterRainVolume().value;
+                float volume = baseVolume * (masterRainVolume != null ? masterRainVolume.value : 1.0f);
 
                 float materialMultiplier = getMaterialVolumeMultiplier(soundToPlay, settings);
                 volume *= materialMultiplier;
 
                 if (isUnderCover) {
-                    volume *= settings.betterthanrain$getMuffledVolume().value;
+                    volume *= (muffledVolume != null ? muffledVolume.value : 1.0f);
                 }
 
                 volume *= GLOBAL_GAIN;
 
                 float pitch = 0.8f + RANDOM.nextFloat() * 0.4f;
 
-                SoundCategory soundCategory = settings.betterthanrain$getUseWeatherSounds().value ?
+                SoundCategory soundCategory = (useWeatherSounds != null && useWeatherSounds.value) ?
                     SoundCategory.WORLD_SOUNDS : SoundCategory.WEATHER_SOUNDS;
 
                 world.playSoundEffect(null, soundCategory,
@@ -233,31 +239,61 @@ public class RainSoundManager {
         return null;
     }
 
-    private float getMaterialVolumeMultiplier(String soundToPlay, IBetterThanRainOptions settings) {
+    private static OptionFloat getFloatOption(GameSettings settings, String name) {
+        for (net.minecraft.client.option.Option<?> option : GameSettings.options) {
+            if (option instanceof OptionFloat && option.name.equals(name)) {
+                return (OptionFloat) option;
+            }
+        }
+        return null;
+    }
+
+    private static OptionBoolean getBooleanOption(GameSettings settings, String name) {
+        for (net.minecraft.client.option.Option<?> option : GameSettings.options) {
+            if (option instanceof OptionBoolean && option.name.equals(name)) {
+                return (OptionBoolean) option;
+            }
+        }
+        return null;
+    }
+
+    private float getMaterialVolumeMultiplier(String soundToPlay, GameSettings settings) {
         if (soundToPlay.contains("rain_sounds_metal")) {
-            return settings.betterthanrain$getMetalRainVolume().value;
-		} else if (soundToPlay.contains("rain_sounds_metal_thin")) {
-            return settings.betterthanrain$getMetalRainVolume().value;
+            OptionFloat opt = getFloatOption(settings, "betterthanrain.metalRainVolume");
+            return opt != null ? opt.value : 1.0f;
+        } else if (soundToPlay.contains("rain_sounds_metal_thin")) {
+            OptionFloat opt = getFloatOption(settings, "betterthanrain.metalRainVolume");
+            return opt != null ? opt.value : 1.0f;
         } else if (soundToPlay.contains("rain_sounds_glass")) {
-            return settings.betterthanrain$getGlassRainVolume().value;
+            OptionFloat opt = getFloatOption(settings, "betterthanrain.glassRainVolume");
+            return opt != null ? opt.value : 1.0f;
         } else if (soundToPlay.contains("rain_sounds_fabric")) {
-            return settings.betterthanrain$getFabricRainVolume().value;
+            OptionFloat opt = getFloatOption(settings, "betterthanrain.fabricRainVolume");
+            return opt != null ? opt.value : 1.0f;
 		} else if (soundToPlay.contains("rain_sounds_fabric_thin")) {
-            return settings.betterthanrain$getFabricRainVolume().value;
+            OptionFloat opt = getFloatOption(settings, "betterthanrain.fabricRainVolume");
+            return opt != null ? opt.value : 1.0f;
         } else if (soundToPlay.contains("rain_sounds_lava")) {
-            return settings.betterthanrain$getLavaRainVolume().value;
+            OptionFloat opt = getFloatOption(settings, "betterthanrain.lavaRainVolume");
+            return opt != null ? opt.value : 1.0f;
         } else if (soundToPlay.contains("rain_sounds_foliage")) {
-            return settings.betterthanrain$getFoliageRainVolume().value;
+            OptionFloat opt = getFloatOption(settings, "betterthanrain.foliageRainVolume");
+            return opt != null ? opt.value : 1.0f;
         } else if (soundToPlay.contains("rain_sounds_water")) {
-            return settings.betterthanrain$getWaterRainVolume().value;
+            OptionFloat opt = getFloatOption(settings, "betterthanrain.waterRainVolume");
+            return opt != null ? opt.value : 1.0f;
         } else if (soundToPlay.contains("rain_sounds_noteblock")) {
-            return settings.betterthanrain$getNoteblockRainVolume().value;
+            OptionFloat opt = getFloatOption(settings, "betterthanrain.noteblockRainVolume");
+            return opt != null ? opt.value : 1.0f;
         } else if (soundToPlay.contains("rain_sounds_stone")) {
-            return settings.betterthanrain$getStoneRainVolume().value;
+            OptionFloat opt = getFloatOption(settings, "betterthanrain.stoneRainVolume");
+            return opt != null ? opt.value : 1.0f;
         } else if (soundToPlay.contains("rain_sounds_wood")) {
-            return settings.betterthanrain$getWoodRainVolume().value;
+            OptionFloat opt = getFloatOption(settings, "betterthanrain.woodRainVolume");
+            return opt != null ? opt.value : 1.0f;
         } else if (soundToPlay.contains("rain_sounds_plastic")) {
-            return settings.betterthanrain$getPlasticRainVolume().value;
+            OptionFloat opt = getFloatOption(settings, "betterthanrain.plasticRainVolume");
+            return opt != null ? opt.value : 1.0f;
         }
 
         return 1.0f;

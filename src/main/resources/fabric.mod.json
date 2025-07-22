@@ -36,6 +36,9 @@
 		"afterClientStart": [
 			"com.pasithea0.betterthanrain.BetterThanRainMod",
 			"com.pasithea0.betterthanrain.gui.GuiOptionsPageBetterThanRain"
+		],
+		"initOptions": [
+			"com.pasithea0.betterthanrain.BetterThanRainMod"
 		]
 	},
   "mixins": [
