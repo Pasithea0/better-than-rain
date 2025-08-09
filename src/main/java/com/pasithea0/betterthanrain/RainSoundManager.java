@@ -25,8 +25,8 @@ public class RainSoundManager {
     private static final float GLOBAL_GAIN = 2.0f;
 
     // Sound management constants
-    private static final int SOUND_COOLDOWN_MIN = 30;
-    private static final int SOUND_COOLDOWN_MAX = 50;
+    private static final int SOUND_COOLDOWN_MIN = 25;
+    private static final int SOUND_COOLDOWN_MAX = 40;
     private static final int TICK_INTERVAL = 3; // Faster for bouncing sounds
 
     // Cached data structures
