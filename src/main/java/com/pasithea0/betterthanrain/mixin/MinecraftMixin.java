@@ -2,6 +2,7 @@ package com.pasithea0.betterthanrain.mixin;
 
 import com.pasithea0.betterthanrain.RainSoundManager;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.world.weather.Weathers;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -12,11 +13,11 @@ public class MinecraftMixin {
 
     @Inject(method = "runTick", at = @At("TAIL"))
     private void onRunTick(CallbackInfo ci) {
-        // Only call the rain sound manager if it's actually raining
+        // Only call the rain sound manager if it's actually raining (not snowing)
         Minecraft mc = (Minecraft)(Object)this;
         if (mc.currentWorld != null && mc.thePlayer != null) {
             net.minecraft.core.world.weather.Weather currentWeather = mc.currentWorld.getCurrentWeather();
-            if (currentWeather != null && currentWeather.isPrecipitation && mc.currentWorld.weatherManager.getWeatherIntensity() > 0.1f) {
+            if (currentWeather != null && currentWeather == Weathers.OVERWORLD_STORM && mc.currentWorld.weatherManager.getWeatherIntensity() > 0.1f) {
                 RainSoundManager.tick(mc);
             }
         }

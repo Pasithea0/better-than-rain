@@ -7,6 +7,7 @@ import net.minecraft.core.entity.player.Player;
 import net.minecraft.core.sound.SoundCategory;
 import net.minecraft.core.world.World;
 import net.minecraft.core.world.weather.Weather;
+import net.minecraft.core.world.weather.Weathers;
 import net.minecraft.client.option.OptionBoolean;
 import net.minecraft.client.option.OptionFloat;
 import net.minecraft.client.option.GameSettings;
@@ -124,13 +125,13 @@ public class RainSoundManager {
 
         // Check if we need to play a new sound (bouncing effect)
         if (activeSoundTypes.isEmpty()) {
-            playNextRainSound(world, player, playerX, playerY, playerZ, currentIntensity);
+            playNextRainSound(mc, world, player, playerX, playerY, playerZ, currentIntensity);
         }
 
         lastRainState = currentlyRaining;
     }
 
-    private void playNextRainSound(World world, Player player, int playerX, int playerY, int playerZ, float intensity) {
+    private void playNextRainSound(Minecraft mc, World world, Player player, int playerX, int playerY, int playerZ, float intensity) {
         List<Integer> coveringBlocks = getCoveringBlocks(world, playerX, playerY, playerZ);
         List<SoundCandidate> soundCandidates = findRainSounds(world, playerX, playerY, playerZ, coveringBlocks);
         if (soundCandidates.isEmpty()) {
@@ -151,7 +152,7 @@ public class RainSoundManager {
                 if (shouldPlaySound(candidate.soundName, candidate.position)) {
                     GameSettings settings = Minecraft.getMinecraft().gameSettings;
                     boolean isUnderCover = !coveringBlocks.isEmpty();
-                    playRainSound(world, player, candidate, settings, intensity, isUnderCover);
+                    playRainSound(mc, world, player, candidate, settings, intensity, isUnderCover);
                 }
             }
         }
@@ -175,7 +176,7 @@ public class RainSoundManager {
         return !activeSoundTypes.containsKey(materialType);
     }
 
-    private void playRainSound(World world, Player player, SoundCandidate candidate,
+    private void playRainSound(Minecraft mc, World world, Player player, SoundCandidate candidate,
                               GameSettings settings, float intensity, boolean isUnderCover) {
 
         float baseVolume = calculateBaseVolume(intensity);
@@ -251,7 +252,7 @@ public class RainSoundManager {
     private boolean isRaining(World world) {
         Weather currentWeather = world.getCurrentWeather();
         return currentWeather != null &&
-               currentWeather.isPrecipitation &&
+               currentWeather == Weathers.OVERWORLD_STORM &&
                world.weatherManager.getWeatherIntensity() > MIN_WEATHER_INTENSITY;
     }
 

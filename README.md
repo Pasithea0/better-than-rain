@@ -52,6 +52,31 @@ Experience immersive rain ambiance with unique sounds for different block types:
 3. Launch the game
 4. Configure your preferences in the options menu
 
+## Development
+
+### Prerequisites
+- **Java 8** or higher
+- **Git**
+
+### Setup
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Pasithea0/better-than-rain.git
+   cd better-than-rain
+   ```
+
+2. Install dependencies and build the project:
+   ```bash
+   ./gradlew build
+   ```
+
+3. Run the live test (launches Minecraft with the mod):
+   ```bash
+   ./gradlew runClient
+   ```
+
+The development setup will automatically download all required dependencies and launch Minecraft with your mod loaded for testing.
+
 ## License
 
 This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
