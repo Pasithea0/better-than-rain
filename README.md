@@ -4,9 +4,7 @@
 
 # Better Than Ambiance!
 
-An ambiance mod for **Better than Adventure!** (a b1.7.3 fork) that makes subtle adjustments to the rain experience. Currently it adds unique dynamic sounds to different blocks when raining, and soon *slightly* more realistic rain visuals! (just audio for now)
-
-This mod aims to improve the rain atmosphere while keeping the vanilla feel alive, especially for beta versions.
+An ambiance mod for **Better than Adventure!** (a b1.7.3 fork) that makes subtle adjustments to the rain experience and adds other sounds to improve the mood. Currently, it adds unique dynamic sounds to different blocks when raining, improved thunder effects, crickets, and soon *slightly* more realistic rain visuals! (just audio for now)
 
 *Inspired by [Cool Rain by Jaiz](https://modrinth.com/mod/coolrain) for later versions*
 
