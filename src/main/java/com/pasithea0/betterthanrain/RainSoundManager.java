@@ -230,24 +230,35 @@ public class RainSoundManager {
     private float applyVolumeModifiers(float baseVolume, String soundName, GameSettings settings, boolean isUnderCover) {
         float volume = baseVolume;
 
-        // Apply master rain volume
-        OptionFloat masterVolume = getCachedFloatOption(settings, "betterthanrain.masterRainVolume");
-        if (masterVolume != null) {
-            volume *= masterVolume.value;
-        }
-
         // Apply material-specific volume
         volume *= getMaterialVolumeMultiplier(soundName, settings);
 
-        // Apply muffled volume if under cover
+        // Apply material-specific muffled volume if under cover
         if (isUnderCover) {
-            OptionFloat muffledVolume = getCachedFloatOption(settings, "betterthanrain.muffledVolume");
-            if (muffledVolume != null) {
-                volume *= muffledVolume.value;
+            String muffledName = getMaterialMuffledOptionName(soundName);
+            if (muffledName != null) {
+                OptionFloat muffledVolume = getCachedFloatOption(settings, muffledName);
+                if (muffledVolume != null) {
+                    volume *= muffledVolume.value;
+                }
             }
         }
 
         return volume * GLOBAL_GAIN;
+    }
+
+    private String getMaterialMuffledOptionName(String soundToPlay) {
+        if (soundToPlay.contains("metal")) return "betterthanrain.metalMuffledVolume";
+        if (soundToPlay.contains("glass")) return "betterthanrain.glassMuffledVolume";
+        if (soundToPlay.contains("fabric")) return "betterthanrain.fabricMuffledVolume";
+        if (soundToPlay.contains("lava")) return "betterthanrain.lavaMuffledVolume";
+        if (soundToPlay.contains("foliage")) return "betterthanrain.foliageMuffledVolume";
+        if (soundToPlay.contains("water")) return "betterthanrain.waterMuffledVolume";
+        if (soundToPlay.contains("noteblock")) return "betterthanrain.noteblockMuffledVolume";
+        if (soundToPlay.contains("stone")) return "betterthanrain.stoneMuffledVolume";
+        if (soundToPlay.contains("wood")) return "betterthanrain.woodMuffledVolume";
+        if (soundToPlay.contains("plastic")) return "betterthanrain.plasticMuffledVolume";
+        return null;
     }
 
     private SoundCategory getSoundCategory(GameSettings settings) {

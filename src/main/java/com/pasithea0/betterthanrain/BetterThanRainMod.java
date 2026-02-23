@@ -51,19 +51,31 @@ public class BetterThanRainMod implements ModInitializer, RecipeEntrypoint, Game
 
     @Override
     public void initOptions(GameSettings settings) {
-        new OptionFloat(settings, "betterthanrain.masterRainVolume", 1.0f);
-        new OptionFloat(settings, "betterthanrain.muffledVolume", 1.0f);
+        // Rain
         new OptionFloat(settings, "betterthanrain.metalRainVolume", 1.0f);
+        new OptionFloat(settings, "betterthanrain.metalMuffledVolume", 1.0f);
         new OptionFloat(settings, "betterthanrain.glassRainVolume", 1.0f);
+        new OptionFloat(settings, "betterthanrain.glassMuffledVolume", 1.0f);
         new OptionFloat(settings, "betterthanrain.fabricRainVolume", 1.0f);
+        new OptionFloat(settings, "betterthanrain.fabricMuffledVolume", 1.0f);
         new OptionFloat(settings, "betterthanrain.lavaRainVolume", 0.8f);
+        new OptionFloat(settings, "betterthanrain.lavaMuffledVolume", 1.0f);
         new OptionFloat(settings, "betterthanrain.foliageRainVolume", 0.8f);
+        new OptionFloat(settings, "betterthanrain.foliageMuffledVolume", 1.0f);
         new OptionFloat(settings, "betterthanrain.waterRainVolume", 0.7f);
+        new OptionFloat(settings, "betterthanrain.waterMuffledVolume", 1.0f);
         new OptionFloat(settings, "betterthanrain.noteblockRainVolume", 0.5f);
+        new OptionFloat(settings, "betterthanrain.noteblockMuffledVolume", 1.0f);
         new OptionFloat(settings, "betterthanrain.stoneRainVolume", 0.5f);
+        new OptionFloat(settings, "betterthanrain.stoneMuffledVolume", 1.0f);
         new OptionFloat(settings, "betterthanrain.woodRainVolume", 0.5f);
+        new OptionFloat(settings, "betterthanrain.woodMuffledVolume", 1.0f);
         new OptionFloat(settings, "betterthanrain.plasticRainVolume", 0.8f);
+        new OptionFloat(settings, "betterthanrain.plasticMuffledVolume", 1.0f);
         new OptionBoolean(settings, "betterthanrain.useWeatherSounds", false);
+
+        // Thunder
+        new OptionFloat(settings, "betterthanrain.thunderVolume", 0.5f);
 
         // Crickets / night ambience
         new OptionFloat(settings, "betterthanrain.cricketsVolume", 1.0f);

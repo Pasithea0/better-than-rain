@@ -29,22 +29,32 @@ subtitles.btr.crickets_2=Crickets
 
 # Settings page
 betterthanrain.options.title=Better than Rain
-betterthanrain.options.master=Master Volume
+betterthanrain.options.category=Category
 betterthanrain.options.materials=Material Volumes
+betterthanrain.options.thunder=Thunder
 betterthanrain.options.crickets=Crickets
 
 # Volume settings (with options. prefix for BTA)
-options.betterthanrain.masterRainVolume=Master Rain Volume
-options.betterthanrain.muffledVolume=Muffled Volume
 options.betterthanrain.useWeatherSounds=Use World Sound Category
 options.betterthanrain.metalRainVolume=Metal Rain Volume
+options.betterthanrain.metalMuffledVolume=Metal Muffled Volume
 options.betterthanrain.glassRainVolume=Glass Rain Volume
+options.betterthanrain.glassMuffledVolume=Glass Muffled Volume
 options.betterthanrain.fabricRainVolume=Fabric Rain Volume
+options.betterthanrain.fabricMuffledVolume=Fabric Muffled Volume
 options.betterthanrain.stoneRainVolume=Stone Rain Volume
+options.betterthanrain.stoneMuffledVolume=Stone Muffled Volume
 options.betterthanrain.woodRainVolume=Wood Rain Volume
+options.betterthanrain.woodMuffledVolume=Wood Muffled Volume
 options.betterthanrain.plasticRainVolume=Plastic Rain Volume
+options.betterthanrain.plasticMuffledVolume=Plastic Muffled Volume
 options.betterthanrain.lavaRainVolume=Lava Rain Volume
+options.betterthanrain.lavaMuffledVolume=Lava Muffled Volume
 options.betterthanrain.foliageRainVolume=Foliage Rain Volume
+options.betterthanrain.foliageMuffledVolume=Foliage Muffled Volume
 options.betterthanrain.waterRainVolume=Water Rain Volume
+options.betterthanrain.waterMuffledVolume=Water Muffled Volume
 options.betterthanrain.noteblockRainVolume=Noteblock Rain Volume
+options.betterthanrain.noteblockMuffledVolume=Noteblock Muffled Volume
+options.betterthanrain.thunderVolume=Thunder Volume
 options.betterthanrain.cricketsVolume=Crickets Volume
