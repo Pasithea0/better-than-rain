@@ -29,4 +29,9 @@ public class BetterThanRainSounds {
 
     public static final String RAIN_LIGHT = MOD_ID + ":rain_light";
     public static final String RAIN_MEDIUM = MOD_ID + ":rain_medium";
+
+    // Cricket / night ambiance (firefly blocks + Firefly Cluster mob)
+    public static final String CRICKETS_BACKGROUND = MOD_ID + ":crickets_background";
+    public static final String CRICKETS_1 = MOD_ID + ":crickets_1";
+    public static final String CRICKETS_2 = MOD_ID + ":crickets_2";
 }

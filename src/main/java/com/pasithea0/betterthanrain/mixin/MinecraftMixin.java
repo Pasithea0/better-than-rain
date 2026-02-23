@@ -1,5 +1,6 @@
 package com.pasithea0.betterthanrain.mixin;
 
+import com.pasithea0.betterthanrain.CricketSoundManager;
 import com.pasithea0.betterthanrain.RainSoundManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.world.weather.Weathers;
@@ -25,5 +26,6 @@ public class MinecraftMixin {
             mc.currentWorld.weatherManager.getWeatherIntensity() > 0.1f) {
             RainSoundManager.tick(mc);
         }
+        CricketSoundManager.tick(mc);
     }
 }

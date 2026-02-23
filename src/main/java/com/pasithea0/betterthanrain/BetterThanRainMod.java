@@ -64,5 +64,8 @@ public class BetterThanRainMod implements ModInitializer, RecipeEntrypoint, Game
         new OptionFloat(settings, "betterthanrain.woodRainVolume", 0.5f);
         new OptionFloat(settings, "betterthanrain.plasticRainVolume", 0.8f);
         new OptionBoolean(settings, "betterthanrain.useWeatherSounds", false);
+
+        // Crickets / night ambience
+        new OptionFloat(settings, "betterthanrain.cricketsVolume", 1.0f);
     }
 }

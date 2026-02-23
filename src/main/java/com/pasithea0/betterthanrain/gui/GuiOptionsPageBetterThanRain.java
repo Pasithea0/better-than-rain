@@ -51,7 +51,9 @@ public class GuiOptionsPageBetterThanRain implements ClientStartEntrypoint {
                     .withComponent(new FloatOptionComponent(getFloatOption("betterthanrain.lavaRainVolume")))
                     .withComponent(new FloatOptionComponent(getFloatOption("betterthanrain.foliageRainVolume")))
                     .withComponent(new FloatOptionComponent(getFloatOption("betterthanrain.waterRainVolume")))
-                    .withComponent(new FloatOptionComponent(getFloatOption("betterthanrain.noteblockRainVolume")))));
+                    .withComponent(new FloatOptionComponent(getFloatOption("betterthanrain.noteblockRainVolume"))))
+            .withComponent(new OptionsCategory("betterthanrain.options.crickets")
+                    .withComponent(new FloatOptionComponent(getFloatOption("betterthanrain.cricketsVolume")))));
 
     public static ScreenOptions betterThanRainOptionsScreen(final Screen parent) {
         return new ScreenOptions(parent, BetterThanRainPage);

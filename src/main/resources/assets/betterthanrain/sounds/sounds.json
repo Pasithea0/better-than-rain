@@ -177,5 +177,17 @@
       "rain_medium_1.ogg",
       "rain_medium_3.ogg"
     ]
+  },
+  "crickets_background": {
+    "subtitle": "subtitles.btr.crickets_background",
+    "sounds": ["crickets_background.ogg"]
+  },
+  "crickets_1": {
+    "subtitle": "subtitles.btr.crickets_1",
+    "sounds": ["crickets_1.ogg"]
+  },
+  "crickets_2": {
+    "subtitle": "subtitles.btr.crickets_2",
+    "sounds": ["crickets_2.ogg"]
   }
 }
