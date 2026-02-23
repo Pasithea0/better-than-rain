@@ -12,9 +12,10 @@ This mod aims to improve the rain atmosphere while keeping the vanilla feel aliv
 
 ## Features
 
-### Dynamic Rain Sounds
-Experience immersive rain ambiance with unique sounds for different block types:
+### Dynamic sounds!
+Experience immersive rain ambiance with unique sounds for different block types, crickets, and more!
 
+Rain:
 - **Block of Iron** - Normal and muffled
 - **Block of Gold** - Normal and muffled
 - **Block of Steel** - Normal and muffled
@@ -35,6 +36,10 @@ Experience immersive rain ambiance with unique sounds for different block types:
 - **Nether Coal Block** - Normal
 - **Wet Pumice** - Normal
 
+Extra
+- **Thunder**
+- **Crickets**
+
 ### Demo video!
 
 [![Better Than Ambiance Demo](https://i.vimeocdn.com/video/2038877204-c6f8ad98c2b00f05547a75265512860cf3c30446f2e45f1ad3fdd25f3d350c6e-d?mw=800&mh=450&q=70)](https://vimeo.com/1102976873?share=copy)
@@ -47,7 +52,7 @@ Experience immersive rain ambiance with unique sounds for different block types:
 - **HalpLibe** (included with Babric)
 
 ### Steps
-1. Download the latest release from the [Releases](https://github.com/Pasithea0/better-than-rain/releases) page
+1. Download the latest release from the [Releases](https://github.com/Pasithea0/better-than-ambiance/releases) page
 2. Place the `.jar` file in your `mods` folder
 3. Launch the game
 4. Configure your preferences in the options menu
@@ -61,7 +66,7 @@ Experience immersive rain ambiance with unique sounds for different block types:
 ### Setup
 1. Clone the repository:
    ```bash
-   git clone https://github.com/Pasithea0/better-than-rain.git
+   git clone https://github.com/Pasithea0/better-than-ambiance.git
    cd better-than-rain
    ```
 
@@ -83,5 +88,5 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ## Support
 
-- **Issues**: [Report bugs or request features](https://github.com/Pasithea0/better-than-rain/issues)
+- **Issues**: [Report bugs or request features](https://github.com/Pasithea0/better-than-ambiance/issues)
 
