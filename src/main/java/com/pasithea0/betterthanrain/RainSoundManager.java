@@ -251,9 +251,18 @@ public class RainSoundManager {
 
     private boolean isRaining(World world) {
         Weather currentWeather = world.getCurrentWeather();
-        return currentWeather != null &&
-               currentWeather == Weathers.OVERWORLD_STORM &&
-               world.weatherManager.getWeatherIntensity() > MIN_WEATHER_INTENSITY;
+        if (currentWeather == null || !currentWeather.isPrecipitation) {
+            return false;
+        }
+
+        // Exclude snow-type weathers so we only react to rain-like precipitation
+        if (currentWeather == Weathers.OVERWORLD_SNOW ||
+            currentWeather == Weathers.OVERWORLD_WINTER_SNOW) {
+            return false;
+        }
+
+        float intensity = world.weatherManager.getWeatherIntensity();
+        return intensity > MIN_WEATHER_INTENSITY;
     }
 
     private List<Integer> getCoveringBlocks(World world, int playerX, int playerY, int playerZ) {
