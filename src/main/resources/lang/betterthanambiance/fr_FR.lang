@@ -1,0 +1,57 @@
+subtitles.btr.test=Tester le son
+subtitles.btr.rain_sounds_metal=Pluie sur le métal
+subtitles.btr.rain_sounds_metal_muffled=Pluie étouffée sur le métal
+subtitles.btr.rain_sounds_metal_thin=Pluie sur le métal fin
+subtitles.btr.rain_sounds_fabric=Pluie sur le tissu
+subtitles.btr.rain_sounds_fabric_muffled=Pluie étouffée sur le tissu
+subtitles.btr.rain_sounds_fabric_thin=Pluie sur le tissu fin
+subtitles.btr.rain_sounds_glass=Pluie sur le verre
+subtitles.btr.rain_sounds_glass_muffled=Pluie étouffée sur le verre
+subtitles.btr.rain_sounds_foliage=Pluie sur le feuillage
+subtitles.btr.rain_sounds_water=Pluie sur l'eau
+subtitles.btr.rain_sounds_stone=Pluie sur la pierre
+subtitles.btr.rain_sounds_stone_muffled=Pluie étouffée sur la pierre
+subtitles.btr.rain_sounds_wood_muffled=Pluie étouffée sur le bois
+subtitles.btr.rain_sounds_plastic=Pluie sur le plastique
+subtitles.btr.rain_sounds_amethyst=Pluie sur l'améthyste
+subtitles.btr.rain_sounds_noteblock=Pluie sur un bloc musical
+subtitles.btr.rain_sounds_lava=Pluie sur la lave
+subtitles.btr.thunder_close=Tonnerre proche
+subtitles.btr.thunder_distant=Tonnerre lointain
+subtitles.btr.rain_light=Pluie légère
+subtitles.btr.rain_medium=Pluie moyenne
+subtitles.btr.crickets_background=Grillons
+subtitles.btr.crickets_1=Grillons
+subtitles.btr.crickets_2=Grillons
+
+# Settings page
+betterthanambiance.options.title=Better Than Ambiance
+betterthanambiance.options.category=Catégorie
+betterthanambiance.options.materials=Volumes des matériaux
+betterthanambiance.options.thunder=Tonnerre
+betterthanambiance.options.crickets=Grillons
+
+# Volume settings (with options. prefix for BTA)
+options.betterthanambiance.useWeatherSounds=Utiliser la catégorie sons du monde
+options.betterthanambiance.metalRainVolume=Volume pluie métal
+options.betterthanambiance.metalMuffledVolume=Volume pluie métal étouffée
+options.betterthanambiance.glassRainVolume=Volume pluie verre
+options.betterthanambiance.glassMuffledVolume=Volume pluie verre étouffée
+options.betterthanambiance.fabricRainVolume=Volume pluie tissu
+options.betterthanambiance.fabricMuffledVolume=Volume pluie tissu étouffée
+options.betterthanambiance.stoneRainVolume=Volume pluie pierre
+options.betterthanambiance.stoneMuffledVolume=Volume pluie pierre étouffée
+options.betterthanambiance.woodRainVolume=Volume pluie bois
+options.betterthanambiance.woodMuffledVolume=Volume pluie bois étouffée
+options.betterthanambiance.plasticRainVolume=Volume pluie plastique
+options.betterthanambiance.plasticMuffledVolume=Volume pluie plastique étouffée
+options.betterthanambiance.lavaRainVolume=Volume pluie lave
+options.betterthanambiance.lavaMuffledVolume=Volume pluie lave étouffée
+options.betterthanambiance.foliageRainVolume=Volume pluie feuillage
+options.betterthanambiance.foliageMuffledVolume=Volume pluie feuillage étouffée
+options.betterthanambiance.waterRainVolume=Volume pluie eau
+options.betterthanambiance.waterMuffledVolume=Volume pluie eau étouffée
+options.betterthanambiance.noteblockRainVolume=Volume pluie bloc musical
+options.betterthanambiance.noteblockMuffledVolume=Volume pluie bloc musical étouffée
+options.betterthanambiance.thunderVolume=Volume tonnerre
+options.betterthanambiance.cricketsVolume=Volume grillons
