@@ -1,4 +1,4 @@
-package com.pasithea0.betterthanrain;
+package com.pasithea0.betterthanambiance;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.sound.SoundEngine;
@@ -62,7 +62,7 @@ public class CricketSoundManager {
             SoundCategory category = getCricketsCategory(mc.gameSettings);
 
             // Fixed pitch so the sample plays as-authored
-            snd.playSoundAt(BetterThanRainSounds.CRICKETS_BACKGROUND,
+            snd.playSoundAt(BetterThanAmbianceSounds.CRICKETS_BACKGROUND,
                     category, x, y, z, volume, 1.0f);
         }
         backgroundCooldown = BACKGROUND_COOLDOWN_TICKS;
@@ -70,7 +70,7 @@ public class CricketSoundManager {
 
     private static float getCricketsVolume(net.minecraft.client.option.GameSettings settings) {
         for (net.minecraft.client.option.Option<?> option : net.minecraft.client.option.GameSettings.options) {
-            if (option instanceof net.minecraft.client.option.OptionFloat && option.name.equals("betterthanrain.cricketsVolume")) {
+            if (option instanceof net.minecraft.client.option.OptionFloat && option.name.equals("betterthanambiance.cricketsVolume")) {
                 return ((net.minecraft.client.option.OptionFloat) option).value;
             }
         }
@@ -81,7 +81,7 @@ public class CricketSoundManager {
         boolean useWorldCategory = false;
         for (net.minecraft.client.option.Option<?> option : net.minecraft.client.option.GameSettings.options) {
             if (option instanceof net.minecraft.client.option.OptionBoolean
-                    && option.name.equals("betterthanrain.useWeatherSounds")) {
+                    && option.name.equals("betterthanambiance.useWeatherSounds")) {
                 useWorldCategory = ((net.minecraft.client.option.OptionBoolean) option).value;
                 break;
             }

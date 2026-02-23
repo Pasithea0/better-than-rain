@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "id": "betterthanrain",
+  "id": "betterthanambiance",
   "version": "${version}",
 
-  "name": "Better than Rain!",
+  "name": "Better Than Ambiance",
   "description": "An ambiance mod that improves the rain experience!",
   "authors": [
     "Pasithea0"
@@ -19,30 +19,30 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-			"com.pasithea0.betterthanrain.BetterThanRainMod"
+			"com.pasithea0.betterthanambiance.BetterThanAmbianceMod"
     ],
 		"beforeGameStart": [
-			"com.pasithea0.betterthanrain.BetterThanRainMod"
+			"com.pasithea0.betterthanambiance.BetterThanAmbianceMod"
 		],
 		"afterGameStart": [
-			"com.pasithea0.betterthanrain.BetterThanRainMod"
+			"com.pasithea0.betterthanambiance.BetterThanAmbianceMod"
 		],
 		"recipesReady": [
-			"com.pasithea0.betterthanrain.BetterThanRainMod"
+			"com.pasithea0.betterthanambiance.BetterThanAmbianceMod"
 		],
 		"beforeClientStart": [
-			"com.pasithea0.betterthanrain.BetterThanRainMod"
+			"com.pasithea0.betterthanambiance.BetterThanAmbianceMod"
 		],
 		"afterClientStart": [
-			"com.pasithea0.betterthanrain.BetterThanRainMod",
-			"com.pasithea0.betterthanrain.gui.GuiOptionsPageBetterThanRain"
+			"com.pasithea0.betterthanambiance.BetterThanAmbianceMod",
+			"com.pasithea0.betterthanambiance.gui.GuiOptionsPageBetterThanAmbiance"
 		],
 		"initOptions": [
-			"com.pasithea0.betterthanrain.BetterThanRainMod"
+			"com.pasithea0.betterthanambiance.BetterThanAmbianceMod"
 		]
 	},
   "mixins": [
-      "betterthanrain.mixins.json"
+      "betterthanambiance.mixins.json"
   ],
 
   "depends": {

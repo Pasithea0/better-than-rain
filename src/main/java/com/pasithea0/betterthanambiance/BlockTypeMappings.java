@@ -1,4 +1,4 @@
-package com.pasithea0.betterthanrain;
+package com.pasithea0.betterthanambiance;
 
 import java.util.HashSet;
 import java.util.Set;

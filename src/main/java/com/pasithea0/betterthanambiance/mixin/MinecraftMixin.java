@@ -1,7 +1,7 @@
-package com.pasithea0.betterthanrain.mixin;
+package com.pasithea0.betterthanambiance.mixin;
 
-import com.pasithea0.betterthanrain.CricketSoundManager;
-import com.pasithea0.betterthanrain.RainSoundManager;
+import com.pasithea0.betterthanambiance.CricketSoundManager;
+import com.pasithea0.betterthanambiance.RainSoundManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.world.weather.Weathers;
 import org.spongepowered.asm.mixin.Mixin;

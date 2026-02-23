@@ -1,10 +1,10 @@
-package com.pasithea0.betterthanrain;
+package com.pasithea0.betterthanambiance;
 
 /**
- * Sound constants for Better than Rain mod.
+ * Sound constants for Better Than Ambiance mod.
  */
-public class BetterThanRainSounds {
-    private static final String MOD_ID = BetterThanRainMod.MOD_ID;
+public class BetterThanAmbianceSounds {
+    private static final String MOD_ID = BetterThanAmbianceMod.MOD_ID;
 
     public static final String RAIN_SOUNDS_METAL = MOD_ID + ":rain_sounds_metal";
     public static final String RAIN_SOUNDS_METAL_MUFFLED = MOD_ID + ":rain_sounds_metal_muffled";

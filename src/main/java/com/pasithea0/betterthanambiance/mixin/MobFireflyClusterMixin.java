@@ -1,6 +1,6 @@
-package com.pasithea0.betterthanrain.mixin;
+package com.pasithea0.betterthanambiance.mixin;
 
-import com.pasithea0.betterthanrain.BetterThanRainSounds;
+import com.pasithea0.betterthanambiance.BetterThanAmbianceSounds;
 import net.minecraft.core.entity.animal.MobFireflyCluster;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,13 +17,13 @@ public class MobFireflyClusterMixin {
 
     private static String pickCricketSound() {
         return RANDOM.nextBoolean()
-                ? BetterThanRainSounds.CRICKETS_1
-                : BetterThanRainSounds.CRICKETS_2;
+                ? BetterThanAmbianceSounds.CRICKETS_1
+                : BetterThanAmbianceSounds.CRICKETS_2;
     }
 
     // Force Firefly Cluster ambient sound to be our cricket clips
     @Inject(method = "getLivingSound", at = @At("HEAD"), cancellable = true)
-    private void betterthanrain_playCricketSound(CallbackInfoReturnable<String> cir) {
+    private void betterthanambiance_playCricketSound(CallbackInfoReturnable<String> cir) {
         cir.setReturnValue(pickCricketSound());
         cir.cancel();
     }

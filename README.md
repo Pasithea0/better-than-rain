@@ -1,8 +1,8 @@
 <div align="center">
-  <img src="src/main/resources/icon.png" alt="Better than Rain! Icon" width="128" height="128">
+  <img src="src/main/resources/icon.png" alt="Better Than Ambiance Icon" width="128" height="128">
 </div>
 
-# Better than Rain!
+# Better Than Ambiance!
 
 An ambiance mod for **Better than Adventure!** (a b1.7.3 fork) that makes subtle adjustments to the rain experience. Currently it adds unique dynamic sounds to different blocks when raining, and soon *slightly* more realistic rain visuals! (just audio for now)
 
@@ -37,7 +37,7 @@ Experience immersive rain ambiance with unique sounds for different block types:
 
 ### Demo video!
 
-[![Better than Rain Demo](https://i.vimeocdn.com/video/2038877204-c6f8ad98c2b00f05547a75265512860cf3c30446f2e45f1ad3fdd25f3d350c6e-d?mw=800&mh=450&q=70)](https://vimeo.com/1102976873?share=copy)
+[![Better Than Ambiance Demo](https://i.vimeocdn.com/video/2038877204-c6f8ad98c2b00f05547a75265512860cf3c30446f2e45f1ad3fdd25f3d350c6e-d?mw=800&mh=450&q=70)](https://vimeo.com/1102976873?share=copy)
 
 ## Installation
 

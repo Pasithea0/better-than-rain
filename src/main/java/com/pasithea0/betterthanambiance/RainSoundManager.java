@@ -1,4 +1,4 @@
-package com.pasithea0.betterthanrain;
+package com.pasithea0.betterthanambiance;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.sound.SoundEngine;
@@ -248,21 +248,21 @@ public class RainSoundManager {
     }
 
     private String getMaterialMuffledOptionName(String soundToPlay) {
-        if (soundToPlay.contains("metal")) return "betterthanrain.metalMuffledVolume";
-        if (soundToPlay.contains("glass")) return "betterthanrain.glassMuffledVolume";
-        if (soundToPlay.contains("fabric")) return "betterthanrain.fabricMuffledVolume";
-        if (soundToPlay.contains("lava")) return "betterthanrain.lavaMuffledVolume";
-        if (soundToPlay.contains("foliage")) return "betterthanrain.foliageMuffledVolume";
-        if (soundToPlay.contains("water")) return "betterthanrain.waterMuffledVolume";
-        if (soundToPlay.contains("noteblock")) return "betterthanrain.noteblockMuffledVolume";
-        if (soundToPlay.contains("stone")) return "betterthanrain.stoneMuffledVolume";
-        if (soundToPlay.contains("wood")) return "betterthanrain.woodMuffledVolume";
-        if (soundToPlay.contains("plastic")) return "betterthanrain.plasticMuffledVolume";
+        if (soundToPlay.contains("metal")) return "betterthanambiance.metalMuffledVolume";
+        if (soundToPlay.contains("glass")) return "betterthanambiance.glassMuffledVolume";
+        if (soundToPlay.contains("fabric")) return "betterthanambiance.fabricMuffledVolume";
+        if (soundToPlay.contains("lava")) return "betterthanambiance.lavaMuffledVolume";
+        if (soundToPlay.contains("foliage")) return "betterthanambiance.foliageMuffledVolume";
+        if (soundToPlay.contains("water")) return "betterthanambiance.waterMuffledVolume";
+        if (soundToPlay.contains("noteblock")) return "betterthanambiance.noteblockMuffledVolume";
+        if (soundToPlay.contains("stone")) return "betterthanambiance.stoneMuffledVolume";
+        if (soundToPlay.contains("wood")) return "betterthanambiance.woodMuffledVolume";
+        if (soundToPlay.contains("plastic")) return "betterthanambiance.plasticMuffledVolume";
         return null;
     }
 
     private SoundCategory getSoundCategory(GameSettings settings) {
-        OptionBoolean useWeatherSounds = getCachedBooleanOption(settings, "betterthanrain.useWeatherSounds");
+        OptionBoolean useWeatherSounds = getCachedBooleanOption(settings, "betterthanambiance.useWeatherSounds");
         return (useWeatherSounds != null && useWeatherSounds.value) ?
             SoundCategory.WORLD_SOUNDS : SoundCategory.WEATHER_SOUNDS;
     }
@@ -362,55 +362,55 @@ public class RainSoundManager {
 
         // Optimized material detection with early returns
         if (BlockTypeMappings.METAL_BLOCKS.contains(blockId)) {
-            return isUnderCover ? BetterThanRainSounds.RAIN_SOUNDS_METAL_MUFFLED
-                                : BetterThanRainSounds.RAIN_SOUNDS_METAL;
+            return isUnderCover ? BetterThanAmbianceSounds.RAIN_SOUNDS_METAL_MUFFLED
+                                : BetterThanAmbianceSounds.RAIN_SOUNDS_METAL;
         }
 
         if (BlockTypeMappings.METAL_BLOCKS_THIN.contains(blockId)) {
-            return isUnderCover ? BetterThanRainSounds.RAIN_SOUNDS_METAL_THIN : null;
+            return isUnderCover ? BetterThanAmbianceSounds.RAIN_SOUNDS_METAL_THIN : null;
         }
 
         if (BlockTypeMappings.GLASS_BLOCKS.contains(blockId)) {
-            return isUnderCover ? BetterThanRainSounds.RAIN_SOUNDS_GLASS_MUFFLED
-                                : BetterThanRainSounds.RAIN_SOUNDS_GLASS;
+            return isUnderCover ? BetterThanAmbianceSounds.RAIN_SOUNDS_GLASS_MUFFLED
+                                : BetterThanAmbianceSounds.RAIN_SOUNDS_GLASS;
         }
 
         if (BlockTypeMappings.FABRIC_BLOCKS.contains(blockId)) {
-            return isUnderCover ? BetterThanRainSounds.RAIN_SOUNDS_FABRIC_MUFFLED
-                                : BetterThanRainSounds.RAIN_SOUNDS_FABRIC;
+            return isUnderCover ? BetterThanAmbianceSounds.RAIN_SOUNDS_FABRIC_MUFFLED
+                                : BetterThanAmbianceSounds.RAIN_SOUNDS_FABRIC;
         }
 
         if (BlockTypeMappings.FABRIC_BLOCKS_THIN.contains(blockId)) {
-            return isUnderCover ? BetterThanRainSounds.RAIN_SOUNDS_FABRIC_THIN : null;
+            return isUnderCover ? BetterThanAmbianceSounds.RAIN_SOUNDS_FABRIC_THIN : null;
         }
 
         if (BlockTypeMappings.FOLIAGE_BLOCKS.contains(blockId)) {
-            return BetterThanRainSounds.RAIN_SOUNDS_FOLIAGE;
+            return BetterThanAmbianceSounds.RAIN_SOUNDS_FOLIAGE;
         }
 
         if (BlockTypeMappings.WATER_BLOCKS.contains(blockId)) {
-            return BetterThanRainSounds.RAIN_SOUNDS_WATER;
+            return BetterThanAmbianceSounds.RAIN_SOUNDS_WATER;
         }
 
         if (BlockTypeMappings.LAVA_BLOCKS.contains(blockId)) {
-            return BetterThanRainSounds.RAIN_SOUNDS_LAVA;
+            return BetterThanAmbianceSounds.RAIN_SOUNDS_LAVA;
         }
 
         if (BlockTypeMappings.NOTEBLOCK_BLOCKS.contains(blockId)) {
-            return BetterThanRainSounds.RAIN_SOUNDS_NOTEBLOCK;
+            return BetterThanAmbianceSounds.RAIN_SOUNDS_NOTEBLOCK;
         }
 
         if (BlockTypeMappings.STONE_BLOCKS.contains(blockId)) {
-            return isUnderCover ? BetterThanRainSounds.RAIN_SOUNDS_STONE_MUFFLED
-                                : BetterThanRainSounds.RAIN_SOUNDS_STONE;
+            return isUnderCover ? BetterThanAmbianceSounds.RAIN_SOUNDS_STONE_MUFFLED
+                                : BetterThanAmbianceSounds.RAIN_SOUNDS_STONE;
         }
 
         if (BlockTypeMappings.WOOD_BLOCKS.contains(blockId)) {
-            return isUnderCover ? BetterThanRainSounds.RAIN_SOUNDS_WOOD_MUFFLED : null;
+            return isUnderCover ? BetterThanAmbianceSounds.RAIN_SOUNDS_WOOD_MUFFLED : null;
         }
 
         if (BlockTypeMappings.PLASTIC_BLOCKS.contains(blockId)) {
-            return BetterThanRainSounds.RAIN_SOUNDS_PLASTIC;
+            return BetterThanAmbianceSounds.RAIN_SOUNDS_PLASTIC;
         }
 
         return null;
@@ -450,16 +450,16 @@ public class RainSoundManager {
     }
 
     private String getMaterialVolumeOptionName(String soundToPlay) {
-        if (soundToPlay.contains("metal")) return "betterthanrain.metalRainVolume";
-        if (soundToPlay.contains("glass")) return "betterthanrain.glassRainVolume";
-        if (soundToPlay.contains("fabric")) return "betterthanrain.fabricRainVolume";
-        if (soundToPlay.contains("lava")) return "betterthanrain.lavaRainVolume";
-        if (soundToPlay.contains("foliage")) return "betterthanrain.foliageRainVolume";
-        if (soundToPlay.contains("water")) return "betterthanrain.waterRainVolume";
-        if (soundToPlay.contains("noteblock")) return "betterthanrain.noteblockRainVolume";
-        if (soundToPlay.contains("stone")) return "betterthanrain.stoneRainVolume";
-        if (soundToPlay.contains("wood")) return "betterthanrain.woodRainVolume";
-        if (soundToPlay.contains("plastic")) return "betterthanrain.plasticRainVolume";
+        if (soundToPlay.contains("metal")) return "betterthanambiance.metalRainVolume";
+        if (soundToPlay.contains("glass")) return "betterthanambiance.glassRainVolume";
+        if (soundToPlay.contains("fabric")) return "betterthanambiance.fabricRainVolume";
+        if (soundToPlay.contains("lava")) return "betterthanambiance.lavaRainVolume";
+        if (soundToPlay.contains("foliage")) return "betterthanambiance.foliageRainVolume";
+        if (soundToPlay.contains("water")) return "betterthanambiance.waterRainVolume";
+        if (soundToPlay.contains("noteblock")) return "betterthanambiance.noteblockRainVolume";
+        if (soundToPlay.contains("stone")) return "betterthanambiance.stoneRainVolume";
+        if (soundToPlay.contains("wood")) return "betterthanambiance.woodRainVolume";
+        if (soundToPlay.contains("plastic")) return "betterthanambiance.plasticRainVolume";
         return null;
     }
 
