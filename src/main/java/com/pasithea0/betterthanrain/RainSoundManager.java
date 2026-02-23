@@ -84,8 +84,10 @@ public class RainSoundManager {
     }
 
     public static void tick(Minecraft mc) {
-        if (mc.currentWorld == null || mc.thePlayer == null) {
-            cleanup();
+        if (mc.currentWorld == null || mc.thePlayer == null || mc.isGamePaused) {
+            if (mc.isGamePaused) {
+                cleanup();
+            }
             return;
         }
 
