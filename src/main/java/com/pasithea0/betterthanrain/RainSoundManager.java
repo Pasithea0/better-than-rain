@@ -1,6 +1,7 @@
 package com.pasithea0.betterthanrain;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.sound.SoundEngine;
 import net.minecraft.core.block.Block;
 import net.minecraft.core.block.Blocks;
 import net.minecraft.core.entity.player.Player;
@@ -181,15 +182,14 @@ public class RainSoundManager {
 
         float baseVolume = calculateBaseVolume(intensity);
 
-        // Calculate distance-based volume
-        float distance = (float) Math.sqrt(
-            (player.x - candidate.position.x) * (player.x - candidate.position.x) +
-            (player.y - candidate.position.y) * (player.y - candidate.position.y) +
-            (player.z - candidate.position.z) * (player.z - candidate.position.z)
-        );
+        // Distance from player to sound source (block center) for spatial falloff
+        double dx = (candidate.position.x + 0.5) - player.x;
+        double dy = (candidate.position.y + 0.5) - player.y;
+        double dz = (candidate.position.z + 0.5) - player.z;
+        float distance = (float) Math.sqrt(dx * dx + dy * dy + dz * dz);
 
-        // Apply distance falloff (closer = louder)
-        float distanceMultiplier = Math.max(0.1f, 1.0f - (distance / SEARCH_RADIUS));
+        // Stronger distance falloff so sound clearly comes from the block (inverse distance)
+        float distanceMultiplier = 1.0f / (1.0f + distance);
         baseVolume *= distanceMultiplier;
 
         float volume = applyVolumeModifiers(baseVolume, candidate.soundName, settings, isUnderCover);
@@ -200,13 +200,18 @@ public class RainSoundManager {
 
         float pitch = 0.8f + RANDOM.nextFloat() * 0.4f;
 
-        // Use cached sound category
         SoundCategory soundCategory = getSoundCategory(settings);
+        float x = (float) (candidate.position.x + 0.5);
+        float y = (float) (candidate.position.y + 0.5);
+        float z = (float) (candidate.position.z + 0.5);
 
-        // Play sound at the exact block position (not random!)
-        world.playSoundEffect(null, soundCategory,
-                            candidate.position.x + 0.5, candidate.position.y + 0.5, candidate.position.z + 0.5,
-                            candidate.soundName, volume, pitch);
+        // Use client SoundEngine positional API so the sound is truly 3D (comes from the block)
+        SoundEngine snd = mc.sndManager;
+        if (snd != null) {
+            snd.playSoundAt(candidate.soundName, soundCategory, x, y, z, volume, pitch);
+        } else {
+            world.playSoundEffect(null, soundCategory, x, y, z, candidate.soundName, volume, pitch);
+        }
 
         // Track this sound by material type
         String materialType = getMaterialType(candidate.soundName);
