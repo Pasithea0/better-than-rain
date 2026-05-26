@@ -35,7 +35,7 @@ public class GuiOptionsPageBetterThanAmbiance implements ClientStartEntrypoint {
         return null;
     }
 
-    public static final OptionsPage BetterThanAmbiancePage = OptionsPages.register(new OptionsPage("betterthanambiance.options.title", Items.BUCKET_IRON.getDefaultStack())
+    public static final OptionsPage BetterThanAmbiancePage = OptionsPages.register(new OptionsPage("betterthanambiance.options.title", Items.RECORD_WAIT.getDefaultStack())
             .withComponent(
                     new OptionsCategory("betterthanambiance.options.category")
                             .withComponent(new BooleanOptionComponent(getBooleanOption("betterthanambiance.useWeatherSounds"))))
