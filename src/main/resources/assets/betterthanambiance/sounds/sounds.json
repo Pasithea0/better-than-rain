@@ -1,6 +1,6 @@
 {
   "rain_sounds_metal": {
-    "subtitle": "subtitles.btr.rain_sounds_metal",
+    "subtitle": "subtitles.betterthanambiance.rain_sounds_metal",
     "sounds": [
       "rain_sounds_metal_1.ogg",
       "rain_sounds_metal_2.ogg",
@@ -10,7 +10,7 @@
     ]
   },
   "rain_sounds_metal_muffled": {
-    "subtitle": "subtitles.btr.rain_sounds_metal_muffled",
+    "subtitle": "subtitles.betterthanambiance.rain_sounds_metal_muffled",
     "sounds": [
       "rain_sounds_metal_muffled_1.ogg",
       "rain_sounds_metal_muffled_2.ogg",
@@ -19,14 +19,14 @@
     ]
   },
   "rain_sounds_metal_thin": {
-    "subtitle": "subtitles.btr.rain_sounds_metal_thin",
+    "subtitle": "subtitles.betterthanambiance.rain_sounds_metal_thin",
     "sounds": [
       "rain_sounds_metal_thin_1.ogg",
       "rain_sounds_metal_thin_2.ogg"
     ]
   },
   "rain_sounds_fabric": {
-    "subtitle": "subtitles.btr.rain_sounds_fabric",
+    "subtitle": "subtitles.betterthanambiance.rain_sounds_fabric",
     "sounds": [
       "rain_sounds_fabric_1.ogg",
       "rain_sounds_fabric_2.ogg",
@@ -34,7 +34,7 @@
     ]
   },
   "rain_sounds_fabric_muffled": {
-    "subtitle": "subtitles.btr.rain_sounds_fabric_muffled",
+    "subtitle": "subtitles.betterthanambiance.rain_sounds_fabric_muffled",
     "sounds": [
       "rain_sounds_fabric_muffled_1.ogg",
       "rain_sounds_fabric_muffled_2.ogg",
@@ -43,13 +43,13 @@
     ]
   },
   "rain_sounds_fabric_thin": {
-    "subtitle": "subtitles.btr.rain_sounds_fabric_thin",
+    "subtitle": "subtitles.betterthanambiance.rain_sounds_fabric_thin",
     "sounds": [
       "rain_sounds_fabric_thin_1.ogg"
     ]
   },
   "rain_sounds_glass": {
-    "subtitle": "subtitles.btr.rain_sounds_glass",
+    "subtitle": "subtitles.betterthanambiance.rain_sounds_glass",
     "sounds": [
       "rain_sounds_glass_1.ogg",
       "rain_sounds_glass_2.ogg",
@@ -60,7 +60,7 @@
     ]
   },
   "rain_sounds_glass_muffled": {
-    "subtitle": "subtitles.btr.rain_sounds_glass_muffled",
+    "subtitle": "subtitles.betterthanambiance.rain_sounds_glass_muffled",
     "sounds": [
       "rain_sounds_glass_muffled_1.ogg",
       "rain_sounds_glass_muffled_2.ogg",
@@ -70,7 +70,7 @@
     ]
   },
   "rain_sounds_foliage": {
-    "subtitle": "subtitles.btr.rain_sounds_foliage",
+    "subtitle": "subtitles.betterthanambiance.rain_sounds_foliage",
     "sounds": [
       "rain_sounds_foliage_1.ogg",
       "rain_sounds_foliage_2.ogg",
@@ -79,7 +79,7 @@
     ]
   },
   "rain_sounds_water": {
-    "subtitle": "subtitles.btr.rain_sounds_water",
+    "subtitle": "subtitles.betterthanambiance.rain_sounds_water",
     "sounds": [
       "rain_sounds_water_1.ogg",
       "rain_sounds_water_2.ogg",
@@ -87,21 +87,21 @@
     ]
   },
   "rain_sounds_stone": {
-    "subtitle": "subtitles.btr.rain_sounds_stone",
+    "subtitle": "subtitles.betterthanambiance.rain_sounds_stone",
     "sounds": [
       "rain_sounds_stone_1.ogg",
       "rain_sounds_stone_2.ogg"
     ]
   },
   "rain_sounds_stone_muffled": {
-    "subtitle": "subtitles.btr.rain_sounds_stone_muffled",
+    "subtitle": "subtitles.betterthanambiance.rain_sounds_stone_muffled",
     "sounds": [
       "rain_sounds_stone_muffled_1.ogg",
       "rain_sounds_stone_muffled_2.ogg"
     ]
   },
   "rain_sounds_wood_muffled": {
-    "subtitle": "subtitles.btr.rain_sounds_wood_muffled",
+    "subtitle": "subtitles.betterthanambiance.rain_sounds_wood_muffled",
     "sounds": [
       "rain_sounds_wood_muffled_1.ogg",
       "rain_sounds_wood_muffled_2.ogg",
@@ -109,14 +109,14 @@
     ]
   },
   "rain_sounds_plastic": {
-    "subtitle": "subtitles.btr.rain_sounds_plastic",
+    "subtitle": "subtitles.betterthanambiance.rain_sounds_plastic",
     "sounds": [
       "rain_sounds_plastic_1.ogg",
       "rain_sounds_plastic_2.ogg"
     ]
   },
   "rain_sounds_noteblock": {
-    "subtitle": "subtitles.btr.rain_sounds_noteblock",
+    "subtitle": "subtitles.betterthanambiance.rain_sounds_noteblock",
     "sounds": [
       "rain_sounds_noteblock_1.ogg",
       "rain_sounds_noteblock_2.ogg",
@@ -137,7 +137,7 @@
     ]
   },
   "rain_sounds_lava": {
-    "subtitle": "subtitles.btr.rain_sounds_lava",
+    "subtitle": "subtitles.betterthanambiance.rain_sounds_lava",
     "sounds": [
       "rain_sounds_lava_1.ogg",
       "rain_sounds_lava_2.ogg",
@@ -147,7 +147,7 @@
     ]
   },
   "thunder_close": {
-    "subtitle": "subtitles.btr.thunder_close",
+    "subtitle": "subtitles.betterthanambiance.thunder_close",
     "sounds": [
       "thunder_close_1.ogg",
       "thunder_close_2.ogg",
@@ -157,7 +157,7 @@
     ]
   },
   "thunder_distant": {
-    "subtitle": "subtitles.btr.thunder_distant",
+    "subtitle": "subtitles.betterthanambiance.thunder_distant",
     "sounds": [
       "thunder_distant_1.ogg",
       "thunder_distant_2.ogg",
@@ -165,29 +165,29 @@
     ]
   },
   "rain_light": {
-    "subtitle": "subtitles.btr.rain_light",
+    "subtitle": "subtitles.betterthanambiance.rain_light",
     "sounds": [
       "rain_light_1.ogg",
       "rain_light_2.ogg"
     ]
   },
   "rain_medium": {
-    "subtitle": "subtitles.btr.rain_medium",
+    "subtitle": "subtitles.betterthanambiance.rain_medium",
     "sounds": [
       "rain_medium_1.ogg",
       "rain_medium_3.ogg"
     ]
   },
   "crickets_background": {
-    "subtitle": "subtitles.btr.crickets_background",
+    "subtitle": "subtitles.betterthanambiance.crickets_background",
     "sounds": ["crickets_background.ogg"]
   },
   "crickets_1": {
-    "subtitle": "subtitles.btr.crickets_1",
+    "subtitle": "subtitles.betterthanambiance.crickets_1",
     "sounds": ["crickets_1.ogg"]
   },
   "crickets_2": {
-    "subtitle": "subtitles.btr.crickets_2",
+    "subtitle": "subtitles.betterthanambiance.crickets_2",
     "sounds": ["crickets_2.ogg"]
   }
 }

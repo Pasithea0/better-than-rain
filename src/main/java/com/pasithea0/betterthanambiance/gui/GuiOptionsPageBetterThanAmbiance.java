@@ -65,7 +65,7 @@ public class GuiOptionsPageBetterThanAmbiance implements ClientStartEntrypoint {
             .withComponent(new OptionsCategory("betterthanambiance.options.crickets")
                     .withComponent(new FloatOptionComponent(getFloatOption("betterthanambiance.cricketsVolume")))));
 
-    public static ScreenOptions betterThanRainOptionsScreen(final Screen parent) {
+    public static ScreenOptions betterThanAmbianceOptionsScreen(final Screen parent) {
         return new ScreenOptions(parent, BetterThanAmbiancePage);
     }
 
