@@ -14,7 +14,6 @@ import net.minecraft.client.option.OptionFloat;
 import net.minecraft.client.option.GameSettings;
 
 import java.util.*;
-
 /**
  * Manages rain sound detection and playback based on blocks near the player.
  */
@@ -152,7 +151,7 @@ public class RainSoundManager {
         for (List<SoundCandidate> candidates : candidatesByType.values()) {
             if (!candidates.isEmpty()) {
                 SoundCandidate candidate = candidates.get(RANDOM.nextInt(candidates.size()));
-                if (shouldPlaySound(candidate.soundName, candidate.position)) {
+				if (shouldPlaySound(mc, candidate.soundName, candidate.position)) {
 
                     boolean isUnderCover = !coveringBlocks.isEmpty();
                     playRainSound(mc, world, player, candidate, intensity, isUnderCover);
@@ -169,15 +168,24 @@ public class RainSoundManager {
         });
     }
 
-    private boolean shouldPlaySound(String soundName, BlockPosition position) {
-        if (soundName == null || soundName.equals("ambient.weather.rain")) {
-            return false;
-        }
-        String materialType = getMaterialType(soundName);
-        if (materialType == null) return false;
-        // Only check if this material type is on cooldown
-        return !activeSoundTypes.containsKey(materialType);
-    }
+	private boolean shouldPlaySound(Minecraft mc, String soundName, BlockPosition position) {
+		// World check
+		if (mc == null || mc.currentWorld == null) {
+			return false;
+		}
+
+		// It's raining
+		if (soundName == null || soundName.equals("ambient.weather.rain")) {
+			return false;
+		}
+		String materialType = getMaterialType(soundName);
+		if (materialType == null) {
+			return false;
+		}
+
+		// Only allow if this material type is not on cooldown
+		return !activeSoundTypes.containsKey(materialType);
+	}
 
     private static void playRainSound(Minecraft mc, World world, Player player, SoundCandidate candidate, float intensity, boolean isUnderCover) {
 

@@ -2,8 +2,8 @@ package com.pasithea0.betterthanambiance.mixin;
 
 import com.pasithea0.betterthanambiance.CricketSoundManager;
 import com.pasithea0.betterthanambiance.RainSoundManager;
+import com.pasithea0.betterthanambiance.ThunderSoundManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.world.weather.Weathers;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -18,14 +18,8 @@ public class MinecraftMixin {
         if (mc.isGamePaused || mc.currentWorld == null || mc.thePlayer == null) {
             return;
         }
-        net.minecraft.core.world.weather.Weather currentWeather = mc.currentWorld.getCurrentWeather();
-        if (currentWeather != null &&
-            (currentWeather instanceof net.minecraft.core.world.weather.IPrecipitation) &&
-            currentWeather != Weathers.OVERWORLD_SNOW &&
-            currentWeather != Weathers.OVERWORLD_WINTER_SNOW &&
-            mc.currentWorld.getWeatherManager().getWeatherIntensity() > 0.1f) {
-            RainSoundManager.tick(mc);
-        }
+		RainSoundManager.tick(mc);
         CricketSoundManager.tick(mc);
+		ThunderSoundManager.tick(mc);
     }
 }

@@ -1,6 +1,5 @@
 package com.pasithea0.betterthanambiance.gui;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.options.ScreenOptions;
 import net.minecraft.client.gui.options.components.FloatOptionComponent;

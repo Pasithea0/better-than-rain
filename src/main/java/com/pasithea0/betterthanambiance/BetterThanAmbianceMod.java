@@ -1,7 +1,6 @@
 package com.pasithea0.betterthanambiance;
 
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.sound.SoundTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
