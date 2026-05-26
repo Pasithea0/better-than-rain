@@ -1,7 +1,6 @@
 package com.pasithea0.betterthanambiance;
 
 import net.minecraft.core.world.weather.Weathers;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.sound.SoundCategory;
 
@@ -86,7 +85,7 @@ public class ThunderSoundManager {
 
 		mc.sndManager.playSound(
 			sound,
-			SoundCategory.WEATHER_SOUNDS,
+			SoundCategory.WEATHER_SOUNDS, // todo make this configurable
 			volume,
 			pitch
 		);
