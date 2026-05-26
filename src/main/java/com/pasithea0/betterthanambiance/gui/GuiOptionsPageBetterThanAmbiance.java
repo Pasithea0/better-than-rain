@@ -15,11 +15,11 @@ import net.minecraft.client.option.OptionFloat;
 import net.minecraft.client.option.OptionBoolean;
 
 public class GuiOptionsPageBetterThanAmbiance implements ClientStartEntrypoint {
-    public static final GameSettings gameSettings = Minecraft.getMinecraft().gameSettings;
+
 
     private static OptionFloat getFloatOption(String name) {
-        for (net.minecraft.client.option.Option<?> option : GameSettings.options) {
-            if (option instanceof OptionFloat && option.name.equals(name)) {
+        for (net.minecraft.client.option.Option<?> option : GameSettings.getAllOptions()) {
+            if (option instanceof OptionFloat && option.id.equals(name)) {
                 return (OptionFloat) option;
             }
         }
@@ -27,15 +27,15 @@ public class GuiOptionsPageBetterThanAmbiance implements ClientStartEntrypoint {
     }
 
     private static OptionBoolean getBooleanOption(String name) {
-        for (net.minecraft.client.option.Option<?> option : GameSettings.options) {
-            if (option instanceof OptionBoolean && option.name.equals(name)) {
+        for (net.minecraft.client.option.Option<?> option : GameSettings.getAllOptions()) {
+            if (option instanceof OptionBoolean && option.id.equals(name)) {
                 return (OptionBoolean) option;
             }
         }
         return null;
     }
 
-    public static final OptionsPage BetterThanAmbiancePage = OptionsPages.register(new OptionsPage("betterthanambiance.options.title", Items.BUCKET_WATER.getDefaultStack())
+    public static final OptionsPage BetterThanAmbiancePage = OptionsPages.register(new OptionsPage("betterthanambiance.options.title", Items.BUCKET_IRON.getDefaultStack())
             .withComponent(
                     new OptionsCategory("betterthanambiance.options.category")
                             .withComponent(new BooleanOptionComponent(getBooleanOption("betterthanambiance.useWeatherSounds"))))

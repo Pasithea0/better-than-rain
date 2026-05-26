@@ -54,12 +54,12 @@ public class CricketSoundManager {
             float z = (float) player.z;
 
             // Scale by the crickets volume option (defaults to 1.0)
-            float volumeScale = getCricketsVolume(mc.gameSettings);
+            float volumeScale = getCricketsVolume();
             float volume = 0.4f * volumeScale;
 
             // Choose sound category: ENTITY_SOUNDS by default, or WORLD_SOUNDS
             // when \"Use World Sound Category\" is enabled (same toggle rain uses).
-            SoundCategory category = getCricketsCategory(mc.gameSettings);
+            SoundCategory category = getCricketsCategory();
 
             // Fixed pitch so the sample plays as-authored
             snd.playSoundAt(BetterThanAmbianceSounds.CRICKETS_BACKGROUND,
@@ -68,20 +68,20 @@ public class CricketSoundManager {
         backgroundCooldown = BACKGROUND_COOLDOWN_TICKS;
     }
 
-    private static float getCricketsVolume(net.minecraft.client.option.GameSettings settings) {
-        for (net.minecraft.client.option.Option<?> option : net.minecraft.client.option.GameSettings.options) {
-            if (option instanceof net.minecraft.client.option.OptionFloat && option.name.equals("betterthanambiance.cricketsVolume")) {
+    private static float getCricketsVolume() {
+        for (net.minecraft.client.option.Option<?> option : net.minecraft.client.option.GameSettings.getAllOptions()) {
+            if (option instanceof net.minecraft.client.option.OptionFloat && option.id.equals("betterthanambiance.cricketsVolume")) {
                 return ((net.minecraft.client.option.OptionFloat) option).value;
             }
         }
         return 1.0f;
     }
 
-    private static SoundCategory getCricketsCategory(net.minecraft.client.option.GameSettings settings) {
+    private static SoundCategory getCricketsCategory() {
         boolean useWorldCategory = false;
-        for (net.minecraft.client.option.Option<?> option : net.minecraft.client.option.GameSettings.options) {
+        for (net.minecraft.client.option.Option<?> option : net.minecraft.client.option.GameSettings.getAllOptions()) {
             if (option instanceof net.minecraft.client.option.OptionBoolean
-                    && option.name.equals("betterthanambiance.useWeatherSounds")) {
+                    && option.id.equals("betterthanambiance.useWeatherSounds")) {
                 useWorldCategory = ((net.minecraft.client.option.OptionBoolean) option).value;
                 break;
             }

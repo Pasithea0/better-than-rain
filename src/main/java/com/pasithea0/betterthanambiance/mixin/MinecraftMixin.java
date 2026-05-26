@@ -20,10 +20,10 @@ public class MinecraftMixin {
         }
         net.minecraft.core.world.weather.Weather currentWeather = mc.currentWorld.getCurrentWeather();
         if (currentWeather != null &&
-            currentWeather.isPrecipitation &&
+            (currentWeather instanceof net.minecraft.core.world.weather.IPrecipitation) &&
             currentWeather != Weathers.OVERWORLD_SNOW &&
             currentWeather != Weathers.OVERWORLD_WINTER_SNOW &&
-            mc.currentWorld.weatherManager.getWeatherIntensity() > 0.1f) {
+            mc.currentWorld.getWeatherManager().getWeatherIntensity() > 0.1f) {
             RainSoundManager.tick(mc);
         }
         CricketSoundManager.tick(mc);

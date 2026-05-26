@@ -29,6 +29,7 @@ public class BetterThanAmbianceMod implements ModInitializer, RecipeEntrypoint, 
 
     @Override
     public void initNamespaces() {
+        net.minecraft.core.lang.I18n.initialize(MOD_ID);
     }
 
     @Override
@@ -42,6 +43,7 @@ public class BetterThanAmbianceMod implements ModInitializer, RecipeEntrypoint, 
 
     @Override
     public void beforeClientStart() {
+        net.minecraft.client.sound.SoundRepository.namespaceAdded(MOD_ID);
         LOGGER.info("Better Than Ambiance client initialized.");
     }
 
@@ -50,42 +52,38 @@ public class BetterThanAmbianceMod implements ModInitializer, RecipeEntrypoint, 
     }
 
     public void initOptions() {
-        registerOptions(Minecraft.getMinecraft().gameSettings);
+        registerOptions();
     }
 
-    @Override
-    public void initOptions(GameSettings settings) {
-        registerOptions(settings);
-    }
 
-    private static void registerOptions(GameSettings settings) {
+    private static void registerOptions() {
         // Rain
-        new OptionFloat(settings, "betterthanambiance.metalRainVolume", 1.0f);
-        new OptionFloat(settings, "betterthanambiance.metalMuffledVolume", 1.0f);
-        new OptionFloat(settings, "betterthanambiance.glassRainVolume", 1.0f);
-        new OptionFloat(settings, "betterthanambiance.glassMuffledVolume", 1.0f);
-        new OptionFloat(settings, "betterthanambiance.fabricRainVolume", 1.0f);
-        new OptionFloat(settings, "betterthanambiance.fabricMuffledVolume", 1.0f);
-        new OptionFloat(settings, "betterthanambiance.lavaRainVolume", 0.8f);
-        new OptionFloat(settings, "betterthanambiance.lavaMuffledVolume", 1.0f);
-        new OptionFloat(settings, "betterthanambiance.foliageRainVolume", 0.8f);
-        new OptionFloat(settings, "betterthanambiance.foliageMuffledVolume", 1.0f);
-        new OptionFloat(settings, "betterthanambiance.waterRainVolume", 0.7f);
-        new OptionFloat(settings, "betterthanambiance.waterMuffledVolume", 1.0f);
-        new OptionFloat(settings, "betterthanambiance.noteblockRainVolume", 0.5f);
-        new OptionFloat(settings, "betterthanambiance.noteblockMuffledVolume", 1.0f);
-        new OptionFloat(settings, "betterthanambiance.stoneRainVolume", 0.5f);
-        new OptionFloat(settings, "betterthanambiance.stoneMuffledVolume", 1.0f);
-        new OptionFloat(settings, "betterthanambiance.woodRainVolume", 0.5f);
-        new OptionFloat(settings, "betterthanambiance.woodMuffledVolume", 1.0f);
-        new OptionFloat(settings, "betterthanambiance.plasticRainVolume", 0.8f);
-        new OptionFloat(settings, "betterthanambiance.plasticMuffledVolume", 1.0f);
-        new OptionBoolean(settings, "betterthanambiance.useWeatherSounds", false);
+        GameSettings.register(new OptionFloat("betterthanambiance.metalRainVolume", 1.0f));
+        GameSettings.register(new OptionFloat("betterthanambiance.metalMuffledVolume", 1.0f));
+        GameSettings.register(new OptionFloat("betterthanambiance.glassRainVolume", 1.0f));
+        GameSettings.register(new OptionFloat("betterthanambiance.glassMuffledVolume", 1.0f));
+        GameSettings.register(new OptionFloat("betterthanambiance.fabricRainVolume", 1.0f));
+        GameSettings.register(new OptionFloat("betterthanambiance.fabricMuffledVolume", 1.0f));
+        GameSettings.register(new OptionFloat("betterthanambiance.lavaRainVolume", 0.8f));
+        GameSettings.register(new OptionFloat("betterthanambiance.lavaMuffledVolume", 1.0f));
+        GameSettings.register(new OptionFloat("betterthanambiance.foliageRainVolume", 0.8f));
+        GameSettings.register(new OptionFloat("betterthanambiance.foliageMuffledVolume", 1.0f));
+        GameSettings.register(new OptionFloat("betterthanambiance.waterRainVolume", 0.7f));
+        GameSettings.register(new OptionFloat("betterthanambiance.waterMuffledVolume", 1.0f));
+        GameSettings.register(new OptionFloat("betterthanambiance.noteblockRainVolume", 0.5f));
+        GameSettings.register(new OptionFloat("betterthanambiance.noteblockMuffledVolume", 1.0f));
+        GameSettings.register(new OptionFloat("betterthanambiance.stoneRainVolume", 0.5f));
+        GameSettings.register(new OptionFloat("betterthanambiance.stoneMuffledVolume", 1.0f));
+        GameSettings.register(new OptionFloat("betterthanambiance.woodRainVolume", 0.5f));
+        GameSettings.register(new OptionFloat("betterthanambiance.woodMuffledVolume", 1.0f));
+        GameSettings.register(new OptionFloat("betterthanambiance.plasticRainVolume", 0.8f));
+        GameSettings.register(new OptionFloat("betterthanambiance.plasticMuffledVolume", 1.0f));
+        GameSettings.register(new OptionBoolean("betterthanambiance.useWeatherSounds", false));
 
         // Thunder
-        new OptionFloat(settings, "betterthanambiance.thunderVolume", 0.5f);
+        GameSettings.register(new OptionFloat("betterthanambiance.thunderVolume", 0.5f));
 
         // Crickets / night ambience
-        new OptionFloat(settings, "betterthanambiance.cricketsVolume", 1.0f);
+        GameSettings.register(new OptionFloat("betterthanambiance.cricketsVolume", 1.0f));
     }
 }

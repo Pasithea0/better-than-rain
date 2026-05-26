@@ -109,7 +109,7 @@ public class RainSoundManager {
         Player player = mc.thePlayer;
 
         boolean currentlyRaining = isRaining(world);
-        float currentIntensity = currentlyRaining ? world.weatherManager.getWeatherIntensity() : 0.0f;
+        float currentIntensity = currentlyRaining ? world.getWeatherManager().getWeatherIntensity() : 0.0f;
 
         // Early exit if not raining
         if (!currentlyRaining) {
@@ -153,9 +153,9 @@ public class RainSoundManager {
             if (!candidates.isEmpty()) {
                 SoundCandidate candidate = candidates.get(RANDOM.nextInt(candidates.size()));
                 if (shouldPlaySound(candidate.soundName, candidate.position)) {
-                    GameSettings settings = Minecraft.getMinecraft().gameSettings;
+
                     boolean isUnderCover = !coveringBlocks.isEmpty();
-                    playRainSound(mc, world, player, candidate, settings, intensity, isUnderCover);
+                    playRainSound(mc, world, player, candidate, intensity, isUnderCover);
                 }
             }
         }
@@ -179,8 +179,7 @@ public class RainSoundManager {
         return !activeSoundTypes.containsKey(materialType);
     }
 
-    private void playRainSound(Minecraft mc, World world, Player player, SoundCandidate candidate,
-                              GameSettings settings, float intensity, boolean isUnderCover) {
+    private static void playRainSound(Minecraft mc, World world, Player player, SoundCandidate candidate, float intensity, boolean isUnderCover) {
 
         float baseVolume = calculateBaseVolume(intensity);
 
@@ -194,7 +193,7 @@ public class RainSoundManager {
         float distanceMultiplier = 1.0f / (1.0f + distance);
         baseVolume *= distanceMultiplier;
 
-        float volume = applyVolumeModifiers(baseVolume, candidate.soundName, settings, isUnderCover);
+        float volume = applyVolumeModifiers(baseVolume, candidate.soundName, isUnderCover);
 
         if (volume <= 0.01f) {
             return; // Don't play inaudible sounds
@@ -202,7 +201,7 @@ public class RainSoundManager {
 
         float pitch = 0.8f + RANDOM.nextFloat() * 0.4f;
 
-        SoundCategory soundCategory = getSoundCategory(settings);
+        SoundCategory soundCategory = getSoundCategory();
         float x = (float) (candidate.position.x + 0.5);
         float y = (float) (candidate.position.y + 0.5);
         float z = (float) (candidate.position.z + 0.5);
@@ -223,21 +222,21 @@ public class RainSoundManager {
         }
     }
 
-    private float calculateBaseVolume(float intensity) {
+    private static float calculateBaseVolume(float intensity) {
         return 0.3f * intensity * intensity; // Quadratic scaling for more natural feel
     }
 
-    private float applyVolumeModifiers(float baseVolume, String soundName, GameSettings settings, boolean isUnderCover) {
+    private static float applyVolumeModifiers(float baseVolume, String soundName, boolean isUnderCover) {
         float volume = baseVolume;
 
         // Apply material-specific volume
-        volume *= getMaterialVolumeMultiplier(soundName, settings);
+        volume *= getMaterialVolumeMultiplier(soundName);
 
         // Apply material-specific muffled volume if under cover
         if (isUnderCover) {
             String muffledName = getMaterialMuffledOptionName(soundName);
             if (muffledName != null) {
-                OptionFloat muffledVolume = getCachedFloatOption(settings, muffledName);
+                OptionFloat muffledVolume = getCachedFloatOption(muffledName);
                 if (muffledVolume != null) {
                     volume *= muffledVolume.value;
                 }
@@ -247,7 +246,7 @@ public class RainSoundManager {
         return volume * GLOBAL_GAIN;
     }
 
-    private String getMaterialMuffledOptionName(String soundToPlay) {
+    private static String getMaterialMuffledOptionName(String soundToPlay) {
         if (soundToPlay.contains("metal")) return "betterthanambiance.metalMuffledVolume";
         if (soundToPlay.contains("glass")) return "betterthanambiance.glassMuffledVolume";
         if (soundToPlay.contains("fabric")) return "betterthanambiance.fabricMuffledVolume";
@@ -261,15 +260,15 @@ public class RainSoundManager {
         return null;
     }
 
-    private SoundCategory getSoundCategory(GameSettings settings) {
-        OptionBoolean useWeatherSounds = getCachedBooleanOption(settings, "betterthanambiance.useWeatherSounds");
+    private static SoundCategory getSoundCategory() {
+        OptionBoolean useWeatherSounds = getCachedBooleanOption("betterthanambiance.useWeatherSounds");
         return (useWeatherSounds != null && useWeatherSounds.value) ?
             SoundCategory.WORLD_SOUNDS : SoundCategory.WEATHER_SOUNDS;
     }
 
     private boolean isRaining(World world) {
         Weather currentWeather = world.getCurrentWeather();
-        if (currentWeather == null || !currentWeather.isPrecipitation) {
+        if (currentWeather == null || !(currentWeather instanceof net.minecraft.core.world.weather.IPrecipitation)) {
             return false;
         }
 
@@ -279,7 +278,7 @@ public class RainSoundManager {
             return false;
         }
 
-        float intensity = world.weatherManager.getWeatherIntensity();
+        float intensity = world.getWeatherManager().getWeatherIntensity();
         return intensity > MIN_WEATHER_INTENSITY;
     }
 
@@ -417,10 +416,10 @@ public class RainSoundManager {
     }
 
     // Optimized option caching methods
-    private static OptionFloat getCachedFloatOption(GameSettings settings, String name) {
+    private static OptionFloat getCachedFloatOption(String name) {
         return cachedFloatOptions.computeIfAbsent(name, key -> {
-            for (net.minecraft.client.option.Option<?> option : GameSettings.options) {
-                if (option instanceof OptionFloat && option.name.equals(key)) {
+            for (net.minecraft.client.option.Option<?> option : GameSettings.getAllOptions()) {
+                if (option instanceof OptionFloat && option.id.equals(key)) {
                     return (OptionFloat) option;
                 }
             }
@@ -428,10 +427,10 @@ public class RainSoundManager {
         });
     }
 
-    private static OptionBoolean getCachedBooleanOption(GameSettings settings, String name) {
+    private static OptionBoolean getCachedBooleanOption(String name) {
         return cachedBooleanOptions.computeIfAbsent(name, key -> {
-            for (net.minecraft.client.option.Option<?> option : GameSettings.options) {
-                if (option instanceof OptionBoolean && option.name.equals(key)) {
+            for (net.minecraft.client.option.Option<?> option : GameSettings.getAllOptions()) {
+                if (option instanceof OptionBoolean && option.id.equals(key)) {
                     return (OptionBoolean) option;
                 }
             }
@@ -439,17 +438,17 @@ public class RainSoundManager {
         });
     }
 
-    private float getMaterialVolumeMultiplier(String soundToPlay, GameSettings settings) {
+    private static float getMaterialVolumeMultiplier(String soundToPlay) {
         // Use a lookup table for better performance
         String optionName = getMaterialVolumeOptionName(soundToPlay);
         if (optionName != null) {
-            OptionFloat opt = getCachedFloatOption(settings, optionName);
+            OptionFloat opt = getCachedFloatOption(optionName);
             return opt != null ? opt.value : 1.0f;
         }
         return 1.0f;
     }
 
-    private String getMaterialVolumeOptionName(String soundToPlay) {
+    private static String getMaterialVolumeOptionName(String soundToPlay) {
         if (soundToPlay.contains("metal")) return "betterthanambiance.metalRainVolume";
         if (soundToPlay.contains("glass")) return "betterthanambiance.glassRainVolume";
         if (soundToPlay.contains("fabric")) return "betterthanambiance.fabricRainVolume";
@@ -464,7 +463,7 @@ public class RainSoundManager {
     }
 
     // Helper to get material type string from sound name
-    private String getMaterialType(String soundName) {
+    private static String getMaterialType(String soundName) {
         if (soundName == null) return null;
         if (soundName.contains("metal")) return "metal";
         if (soundName.contains("glass")) return "glass";
