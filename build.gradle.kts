@@ -102,7 +102,13 @@ tasks {
 		languageVersion = libs.versions.gradleJava.map { JavaLanguageVersion.of(it.toInt()) }
 		vendor = JvmVendorSpec.ADOPTIUM
 	}
-	withType<JavaExec>().configureEach { defaultCharacterEncoding = "UTF-8" }
+	withType<JavaExec>().configureEach {
+		defaultCharacterEncoding = "UTF-8"
+
+		if (org.gradle.internal.os.OperatingSystem.current().isMacOsX) {
+			jvmArgs("-XstartOnFirstThread")
+		}
+	}
 	withType<Javadoc>().configureEach { options.encoding = "UTF-8" }
 	withType<Test>().configureEach { defaultCharacterEncoding = "UTF-8" }
 	withType<Jar>().configureEach {
