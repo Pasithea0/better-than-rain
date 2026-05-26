@@ -1,10 +1,11 @@
 package com.pasithea0.betterthanambiance;
 
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.client.sound.SoundRepository;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.sound.SoundTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import turniplabs.halplibe.HalpLibe;
 import turniplabs.halplibe.util.ClientStartEntrypoint;
 import turniplabs.halplibe.util.GameStartEntrypoint;
 import turniplabs.halplibe.util.RecipeEntrypoint;
@@ -14,7 +15,7 @@ import net.minecraft.client.option.OptionBoolean;
 import net.minecraft.client.option.GameSettings;
 
 public class BetterThanAmbianceMod implements ModInitializer, RecipeEntrypoint, GameStartEntrypoint, ClientStartEntrypoint, OptionsInitEntrypoint {
-    public static final String MOD_ID = "betterthanambiance";
+    public static final String MOD_ID = HalpLibe.registerMod("betterthanambiance", true);
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     @Override
@@ -41,7 +42,6 @@ public class BetterThanAmbianceMod implements ModInitializer, RecipeEntrypoint, 
 
     @Override
     public void beforeClientStart() {
-        SoundRepository.registerNamespace(MOD_ID);
         LOGGER.info("Better Than Ambiance client initialized.");
     }
 
@@ -49,8 +49,16 @@ public class BetterThanAmbianceMod implements ModInitializer, RecipeEntrypoint, 
     public void afterClientStart() {
     }
 
+    public void initOptions() {
+        registerOptions(Minecraft.getMinecraft().gameSettings);
+    }
+
     @Override
     public void initOptions(GameSettings settings) {
+        registerOptions(settings);
+    }
+
+    private static void registerOptions(GameSettings settings) {
         // Rain
         new OptionFloat(settings, "betterthanambiance.metalRainVolume", 1.0f);
         new OptionFloat(settings, "betterthanambiance.metalMuffledVolume", 1.0f);

@@ -1,8 +1,7 @@
 {
   "required": true,
-  "minVersion": "0.8",
   "package": "com.pasithea0.betterthanambiance.mixin",
-  "compatibilityLevel": "JAVA_8",
+  "compatibilityLevel": "JAVA_${java}",
   "mixins": ["MobFireflyClusterMixin"],
   "client": ["MinecraftMixin"],
   "injectors": {
