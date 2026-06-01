@@ -178,6 +178,86 @@
       "rain_medium_3.ogg"
     ]
   },
+  "underwater_ambience": {
+    "subtitle": "subtitles.betterthanambiance.underwater_ambience",
+    "sounds": ["underwater_ambience.ogg"]
+  },
+  "bubbles_1": {
+    "subtitle": "subtitles.betterthanambiance.bubbles_1",
+    "sounds": ["bubbles_1.ogg"]
+  },
+  "bubbles_2": {
+    "subtitle": "subtitles.betterthanambiance.bubbles_2",
+    "sounds": ["bubbles_1.ogg"]
+  },
+  "bubbles_3": {
+    "subtitle": "subtitles.betterthanambiance.bubbles_3",
+    "sounds": ["bubbles_6.ogg"]
+  },
+  "bubbles_4": {
+    "subtitle": "subtitles.betterthanambiance.bubbles_4",
+    "sounds": ["bubbles_1.ogg"]
+  },
+  "bubbles_5": {
+    "subtitle": "subtitles.betterthanambiance.bubbles_5",
+    "sounds": ["bubbles_6.ogg"]
+  },
+  "bubbles_6": {
+    "subtitle": "subtitles.betterthanambiance.bubbles_6",
+    "sounds": ["bubbles_6.ogg"]
+  },
+  "underwater_animal_1": {
+    "subtitle": "subtitles.betterthanambiance.underwater_animal_1",
+    "sounds": ["underwater_animal_1.ogg"]
+  },
+  "underwater_animal_2": {
+    "subtitle": "subtitles.betterthanambiance.underwater_animal_2",
+    "sounds": ["underwater_animal_2.ogg"]
+  },
+  "underwater_bass_whale_1": {
+    "subtitle": "subtitles.betterthanambiance.underwater_bass_whale_1",
+    "sounds": ["underwater_bass_whale_1.ogg"]
+  },
+  "underwater_bass_whale_2": {
+    "subtitle": "subtitles.betterthanambiance.underwater_bass_whale_2",
+    "sounds": ["underwater_bass_whale_2.ogg"]
+  },
+  "underwater_crackles_1": {
+    "subtitle": "subtitles.betterthanambiance.underwater_crackles_1",
+    "sounds": ["underwater_crackles_1.ogg"]
+  },
+  "underwater_crackles_2": {
+    "subtitle": "subtitles.betterthanambiance.underwater_crackles_2",
+    "sounds": ["underwater_crackles_2.ogg"]
+  },
+  "underwater_driplets_1": {
+    "subtitle": "subtitles.betterthanambiance.underwater_driplets_1",
+    "sounds": ["underwater_driplets_1.ogg"]
+  },
+  "underwater_driplets_2": {
+    "subtitle": "subtitles.betterthanambiance.underwater_driplets_2",
+    "sounds": ["underwater_driplets_2.ogg"]
+  },
+  "underwater_earth_crack": {
+    "subtitle": "subtitles.betterthanambiance.underwater_earth_crack",
+    "sounds": ["underwater_earth_crack.ogg"]
+  },
+  "underwater_dark_1": {
+    "subtitle": "subtitles.betterthanambiance.underwater_dark_1",
+    "sounds": ["underwater_dark_1.ogg"]
+  },
+  "underwater_dark_2": {
+    "subtitle": "subtitles.betterthanambiance.underwater_dark_2",
+    "sounds": ["underwater_dark_2.ogg"]
+  },
+  "underwater_dark_3": {
+    "subtitle": "subtitles.betterthanambiance.underwater_dark_3",
+    "sounds": ["underwater_dark_3.ogg"]
+  },
+  "underwater_dark_4": {
+    "subtitle": "subtitles.betterthanambiance.underwater_dark_4",
+    "sounds": ["underwater_dark_4.ogg"]
+  },
   "crickets_background": {
     "subtitle": "subtitles.betterthanambiance.crickets_background",
     "sounds": ["crickets_background.ogg"]

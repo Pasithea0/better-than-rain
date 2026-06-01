@@ -23,12 +23,33 @@ subtitles.betterthanambiance.rain_medium=Medium Rain
 subtitles.betterthanambiance.crickets_background=Crickets
 subtitles.betterthanambiance.crickets_1=Crickets
 subtitles.betterthanambiance.crickets_2=Crickets
+subtitles.betterthanambiance.underwater_ambience=Underwater Ambience
+subtitles.betterthanambiance.bubbles_1=Bubbles
+subtitles.betterthanambiance.bubbles_2=Bubbles
+subtitles.betterthanambiance.bubbles_3=Bubbles
+subtitles.betterthanambiance.bubbles_4=Bubbles
+subtitles.betterthanambiance.bubbles_5=Bubbles
+subtitles.betterthanambiance.bubbles_6=Bubbles
+subtitles.betterthanambiance.underwater_animal_1=Animal
+subtitles.betterthanambiance.underwater_animal_2=Animal
+subtitles.betterthanambiance.underwater_bass_whale_1=Bass Whale
+subtitles.betterthanambiance.underwater_bass_whale_2=Bass Whale
+subtitles.betterthanambiance.underwater_crackles_1=Crackles
+subtitles.betterthanambiance.underwater_crackles_2=Crackles
+subtitles.betterthanambiance.underwater_driplets_1=Driplets
+subtitles.betterthanambiance.underwater_driplets_2=Driplets
+subtitles.betterthanambiance.underwater_earth_crack=Earth Crack
+subtitles.betterthanambiance.underwater_dark_1=Dark
+subtitles.betterthanambiance.underwater_dark_2=Dark
+subtitles.betterthanambiance.underwater_dark_3=Dark
+subtitles.betterthanambiance.underwater_dark_4=Dark
 
 # Settings page
 betterthanambiance.options.title=Better Than Ambiance!
 betterthanambiance.options.category=Category
 betterthanambiance.options.materials=Material Volumes
 betterthanambiance.options.thunder=Thunder
+betterthanambiance.options.underwater=Underwater
 betterthanambiance.options.crickets=Crickets
 
 # Volume settings (with options. prefix for BTA)
@@ -54,4 +75,6 @@ options.betterthanambiance.waterMuffledVolume=Water Muffled Volume
 options.betterthanambiance.noteblockRainVolume=Noteblock Rain Volume
 options.betterthanambiance.noteblockMuffledVolume=Noteblock Muffled Volume
 options.betterthanambiance.thunderVolume=Thunder Volume
+options.betterthanambiance.underwaterEnabled=Underwater Ambience
+options.betterthanambiance.underwaterVolume=Underwater Volume
 options.betterthanambiance.cricketsVolume=Crickets Volume

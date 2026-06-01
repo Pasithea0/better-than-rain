@@ -61,6 +61,9 @@ public class GuiOptionsPageBetterThanAmbiance implements ClientStartEntrypoint {
                     .withComponent(new FloatOptionComponent(getFloatOption("betterthanambiance.noteblockMuffledVolume"))))
             .withComponent(new OptionsCategory("betterthanambiance.options.thunder")
                     .withComponent(new FloatOptionComponent(getFloatOption("betterthanambiance.thunderVolume"))))
+            .withComponent(new OptionsCategory("betterthanambiance.options.underwater")
+                    .withComponent(new BooleanOptionComponent(getBooleanOption("betterthanambiance.underwaterEnabled")))
+                    .withComponent(new FloatOptionComponent(getFloatOption("betterthanambiance.underwaterVolume"))))
             .withComponent(new OptionsCategory("betterthanambiance.options.crickets")
                     .withComponent(new FloatOptionComponent(getFloatOption("betterthanambiance.cricketsVolume")))));
 

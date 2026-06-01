@@ -84,5 +84,9 @@ public class BetterThanAmbianceMod implements ModInitializer, RecipeEntrypoint, 
 
         // Crickets / night ambience
         GameSettings.register(new OptionFloat("betterthanambiance.cricketsVolume", 1.0f));
+
+        // Underwater ambience
+        GameSettings.register(new OptionBoolean("betterthanambiance.underwaterEnabled", true));
+        GameSettings.register(new OptionFloat("betterthanambiance.underwaterVolume", 1.0f));
     }
 }

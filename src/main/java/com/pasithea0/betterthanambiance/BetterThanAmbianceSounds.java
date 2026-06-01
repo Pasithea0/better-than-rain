@@ -34,4 +34,35 @@ public class BetterThanAmbianceSounds {
     public static final String CRICKETS_BACKGROUND = MOD_ID + ":crickets_background";
     public static final String CRICKETS_1 = MOD_ID + ":crickets_1";
     public static final String CRICKETS_2 = MOD_ID + ":crickets_2";
+
+    public static final String UNDERWATER_AMBIENCE = MOD_ID + ":underwater_ambience";
+
+    public static final String BUBBLES_1 = MOD_ID + ":bubbles_1";
+    public static final String BUBBLES_2 = MOD_ID + ":bubbles_2";
+    public static final String BUBBLES_3 = MOD_ID + ":bubbles_3";
+    public static final String BUBBLES_4 = MOD_ID + ":bubbles_4";
+    public static final String BUBBLES_5 = MOD_ID + ":bubbles_5";
+    public static final String BUBBLES_6 = MOD_ID + ":bubbles_6";
+
+    public static final String UNDERWATER_WATER_1 = MOD_ID + ":underwater_water_1";
+    public static final String UNDERWATER_WATER_2 = MOD_ID + ":underwater_water_2";
+
+    public static final String UNDERWATER_ANIMAL_1 = MOD_ID + ":underwater_animal_1";
+    public static final String UNDERWATER_ANIMAL_2 = MOD_ID + ":underwater_animal_2";
+
+    public static final String UNDERWATER_BASS_WHALE_1 = MOD_ID + ":underwater_bass_whale_1";
+    public static final String UNDERWATER_BASS_WHALE_2 = MOD_ID + ":underwater_bass_whale_2";
+
+    public static final String UNDERWATER_CRACKLES_1 = MOD_ID + ":underwater_crackles_1";
+    public static final String UNDERWATER_CRACKLES_2 = MOD_ID + ":underwater_crackles_2";
+
+    public static final String UNDERWATER_DRIPLETS_1 = MOD_ID + ":underwater_driplets_1";
+    public static final String UNDERWATER_DRIPLETS_2 = MOD_ID + ":underwater_driplets_2";
+
+    public static final String UNDERWATER_EARTH_CRACK = MOD_ID + ":underwater_earth_crack";
+
+    public static final String UNDERWATER_DARK_1 = MOD_ID + ":underwater_dark_1";
+    public static final String UNDERWATER_DARK_2 = MOD_ID + ":underwater_dark_2";
+    public static final String UNDERWATER_DARK_3 = MOD_ID + ":underwater_dark_3";
+    public static final String UNDERWATER_DARK_4 = MOD_ID + ":underwater_dark_4";
 }

@@ -23,12 +23,33 @@ subtitles.betterthanambiance.rain_medium=Pluie moyenne
 subtitles.betterthanambiance.crickets_background=Grillons
 subtitles.betterthanambiance.crickets_1=Grillons
 subtitles.betterthanambiance.crickets_2=Grillons
+subtitles.betterthanambiance.underwater_ambience=Ambiance sous-marine
+subtitles.betterthanambiance.bubbles_1=Bulles
+subtitles.betterthanambiance.bubbles_2=Bulles
+subtitles.betterthanambiance.bubbles_3=Bulles
+subtitles.betterthanambiance.bubbles_4=Bulles
+subtitles.betterthanambiance.bubbles_5=Bulles
+subtitles.betterthanambiance.bubbles_6=Bulles
+subtitles.betterthanambiance.underwater_animal_1=Animal
+subtitles.betterthanambiance.underwater_animal_2=Animal
+subtitles.betterthanambiance.underwater_bass_whale_1=Baleine basse
+subtitles.betterthanambiance.underwater_bass_whale_2=Baleine basse
+subtitles.betterthanambiance.underwater_crackles_1=Crépitements
+subtitles.betterthanambiance.underwater_crackles_2=Crépitements
+subtitles.betterthanambiance.underwater_driplets_1=Gouttelettes
+subtitles.betterthanambiance.underwater_driplets_2=Gouttelettes
+subtitles.betterthanambiance.underwater_earth_crack=Fissure terrestre
+subtitles.betterthanambiance.underwater_dark_1=Sombre
+subtitles.betterthanambiance.underwater_dark_2=Sombre
+subtitles.betterthanambiance.underwater_dark_3=Sombre
+subtitles.betterthanambiance.underwater_dark_4=Sombre
 
 # Settings page
 betterthanambiance.options.title=Better Than Ambiance
 betterthanambiance.options.category=Catégorie
 betterthanambiance.options.materials=Volumes des matériaux
 betterthanambiance.options.thunder=Tonnerre
+betterthanambiance.options.underwater=Sous-marin
 betterthanambiance.options.crickets=Grillons
 
 # Volume settings (with options. prefix for BTA)
@@ -54,4 +75,6 @@ options.betterthanambiance.waterMuffledVolume=Volume pluie eau étouffée
 options.betterthanambiance.noteblockRainVolume=Volume pluie bloc musical
 options.betterthanambiance.noteblockMuffledVolume=Volume pluie bloc musical étouffée
 options.betterthanambiance.thunderVolume=Volume tonnerre
+options.betterthanambiance.underwaterEnabled=Ambiance sous-marine
+options.betterthanambiance.underwaterVolume=Volume sous-marin
 options.betterthanambiance.cricketsVolume=Volume grillons
