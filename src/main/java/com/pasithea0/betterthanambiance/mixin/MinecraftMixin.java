@@ -1,9 +1,6 @@
 package com.pasithea0.betterthanambiance.mixin;
 
-import com.pasithea0.betterthanambiance.CricketSoundManager;
-import com.pasithea0.betterthanambiance.RainSoundManager;
-import com.pasithea0.betterthanambiance.ThunderSoundManager;
-import com.pasithea0.betterthanambiance.UnderWaterSoundsManager;
+import com.pasithea0.betterthanambiance.*;
 import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,12 +13,9 @@ public class MinecraftMixin {
     @Inject(method = "runTick", at = @At("TAIL"))
     private void onRunTick(CallbackInfo ci) {
         Minecraft mc = (Minecraft)(Object)this;
-        if (mc.isGamePaused || mc.currentWorld == null || mc.thePlayer == null) {
-            return;
-        }
-		RainSoundManager.tick(mc);
-        CricketSoundManager.tick(mc);
-		ThunderSoundManager.tick(mc);
-        UnderWaterSoundsManager.tick(mc);
+        RainSoundManager.INSTANCE.tick(mc);
+        CricketSoundManager.INSTANCE.tick(mc);
+        ThunderSoundManager.INSTANCE.tick(mc);
+        UnderWaterSoundsManager.INSTANCE.tick(mc);
     }
 }
