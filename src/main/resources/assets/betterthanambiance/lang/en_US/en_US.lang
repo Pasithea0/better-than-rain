@@ -43,6 +43,9 @@ subtitles.betterthanambiance.underwater_dark_1=Dark
 subtitles.betterthanambiance.underwater_dark_2=Dark
 subtitles.betterthanambiance.underwater_dark_3=Dark
 subtitles.betterthanambiance.underwater_dark_4=Dark
+subtitles.betterthanambiance.birds_screaming=Birds
+subtitles.betterthanambiance.ocean_waves=Ocean Waves
+
 
 # Settings page
 betterthanambiance.options.title=Better Than Ambiance!
@@ -50,6 +53,7 @@ betterthanambiance.options.category=Category
 betterthanambiance.options.materials=Material Volumes
 betterthanambiance.options.thunder=Thunder
 betterthanambiance.options.underwater=Underwater
+betterthanambiance.options.overworld=Overworld
 betterthanambiance.options.crickets=Crickets
 
 # Volume settings (with options. prefix for BTA)
@@ -77,4 +81,6 @@ options.betterthanambiance.noteblockMuffledVolume=Noteblock Muffled Volume
 options.betterthanambiance.thunderVolume=Thunder Volume
 options.betterthanambiance.underwaterEnabled=Underwater Ambience
 options.betterthanambiance.underwaterVolume=Underwater Volume
+options.betterthanambiance.overworldEnabled=Overworld Ambience
+options.betterthanambiance.overworldVolume=Overworld Volume
 options.betterthanambiance.cricketsVolume=Crickets Volume

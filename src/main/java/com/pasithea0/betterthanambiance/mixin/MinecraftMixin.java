@@ -17,5 +17,6 @@ public class MinecraftMixin {
         CricketSoundManager.INSTANCE.tick(mc);
         ThunderSoundManager.INSTANCE.tick(mc);
         UnderWaterSoundsManager.INSTANCE.tick(mc);
+        OverworldSoundManager.INSTANCE.tick(mc);
     }
 }

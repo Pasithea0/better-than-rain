@@ -88,5 +88,9 @@ public class BetterThanAmbianceMod implements ModInitializer, RecipeEntrypoint, 
         // Underwater ambience
         GameSettings.register(new OptionBoolean("betterthanambiance.underwaterEnabled", true));
         GameSettings.register(new OptionFloat("betterthanambiance.underwaterVolume", 1.0f));
-    }
+
+		// Overworld ambience
+		GameSettings.register(new OptionBoolean("betterthanambiance.overworldEnabled", true));
+		GameSettings.register(new OptionFloat("betterthanambiance.overworldVolume", 1.0f));
+	}
 }

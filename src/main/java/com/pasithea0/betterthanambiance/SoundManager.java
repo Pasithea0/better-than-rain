@@ -4,10 +4,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.option.GameSettings;
 import net.minecraft.client.option.OptionBoolean;
 import net.minecraft.client.option.OptionFloat;
+import net.minecraft.client.sound.SoundEngine;
 import net.minecraft.core.entity.player.Player;
 import net.minecraft.core.sound.SoundCategory;
 import net.minecraft.core.world.World;
 
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -17,6 +19,12 @@ public abstract class SoundManager {
 
     private static final Map<String, OptionFloat> floatOptionCache = new HashMap<>();
     private static final Map<String, OptionBoolean> booleanOptionCache = new HashMap<>();
+
+    private static Object soundSystem;
+    private static Method playingMethod;
+    private static Method stopMethod;
+    private static Method setVolumeMethod;
+    private static boolean ssInitialized;
 
     protected Minecraft mc;
     protected World world;
@@ -93,5 +101,48 @@ public abstract class SoundManager {
     public static void clearOptionCache() {
         floatOptionCache.clear();
         booleanOptionCache.clear();
+    }
+
+    // === Shared SoundSystem access (via public SoundEngine.getSoundSystem()) ===
+
+    protected static void initSoundSystem() {
+        if (ssInitialized) return;
+        ssInitialized = true;
+        try {
+            Method getter = SoundEngine.class.getMethod("getSoundSystem");
+            soundSystem = getter.invoke(null);
+            if (soundSystem == null) return;
+            Class<?> ssClass = soundSystem.getClass();
+            playingMethod = ssClass.getMethod("playing", String.class);
+            stopMethod = ssClass.getMethod("stop", String.class);
+            setVolumeMethod = ssClass.getMethod("setVolume", String.class, float.class);
+        } catch (Exception e) {
+            BetterThanAmbianceMod.LOGGER.warn("Failed to get SoundSystem: {}", e.getMessage());
+        }
+    }
+
+    protected static boolean isSourcePlaying(String sourceId) {
+        if (soundSystem == null || playingMethod == null) return false;
+        try {
+            return (Boolean) playingMethod.invoke(soundSystem, sourceId);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    protected static void stopSource(String sourceId) {
+        if (soundSystem == null || stopMethod == null) return;
+        try {
+            stopMethod.invoke(soundSystem, sourceId);
+        } catch (Exception e) {
+        }
+    }
+
+    protected static void setSourceVolume(String sourceId, float volume) {
+        if (soundSystem == null || setVolumeMethod == null) return;
+        try {
+            setVolumeMethod.invoke(soundSystem, sourceId, volume);
+        } catch (Exception e) {
+        }
     }
 }

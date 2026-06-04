@@ -1,13 +1,11 @@
 package com.pasithea0.betterthanambiance;
 
-import net.minecraft.client.sound.SoundEngine;
 import net.minecraft.client.option.OptionBoolean;
 import net.minecraft.client.option.OptionFloat;
 import net.minecraft.core.sound.SoundCategory;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,12 +14,6 @@ public class UnderWaterSoundsManager extends SoundManager {
 
     private static final Map<String, Boolean> cachedVorbisAssets = new HashMap<>();
     private static final Map<String, Boolean> cachedVorbisWarnings = new HashMap<>();
-
-    private static Object soundSystem = null;
-    private static Method playingMethod = null;
-    private static Method stopMethod = null;
-    private static Method setVolumeMethod = null;
-    private static boolean reflectionInitialized = false;
 
     private static final float ADDITIONS_CHANCE = 0.70f;
     private static final float RARE_CHANCE = 0.09f;
@@ -82,51 +74,6 @@ public class UnderWaterSoundsManager extends SoundManager {
     private int ultraRareCooldownTicks = 0;
     private float ambienceFadeVolume = 0.0f;
     private float ambienceTargetVolume = 0.0f;
-
-    private static void initSoundSystem() {
-        if (reflectionInitialized) return;
-        reflectionInitialized = true;
-        try {
-            Method getter = SoundEngine.class.getMethod("getSoundSystem");
-            soundSystem = getter.invoke(null);
-            if (soundSystem == null) {
-                BetterThanAmbianceMod.LOGGER.warn("SoundEngine.getSoundSystem() returned null");
-                return;
-            }
-            Class<?> ssClass = soundSystem.getClass();
-            playingMethod = ssClass.getMethod("playing", String.class);
-            stopMethod = ssClass.getMethod("stop", String.class);
-            setVolumeMethod = ssClass.getMethod("setVolume", String.class, float.class);
-            BetterThanAmbianceMod.LOGGER.info("Hooked into SoundSystem via getSoundSystem()");
-        } catch (Exception e) {
-            BetterThanAmbianceMod.LOGGER.warn("Failed to get SoundSystem: {}", e.getMessage());
-        }
-    }
-
-    private static boolean isPlaying() {
-        if (soundSystem == null || playingMethod == null) return false;
-        try {
-            return (Boolean) playingMethod.invoke(soundSystem, AMBIENCE_LOOP_ID);
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    private static void stopAmbience() {
-        if (soundSystem == null || stopMethod == null) return;
-        try {
-            stopMethod.invoke(soundSystem, AMBIENCE_LOOP_ID);
-        } catch (Exception e) {
-        }
-    }
-
-    private static void setAmbienceVolume(float volume) {
-        if (soundSystem == null || setVolumeMethod == null) return;
-        try {
-            setVolumeMethod.invoke(soundSystem, AMBIENCE_LOOP_ID, volume);
-        } catch (Exception e) {
-        }
-    }
 
     @Override
     protected void onEnterInvalidState() {
@@ -190,18 +137,16 @@ public class UnderWaterSoundsManager extends SoundManager {
     }
 
     private void updateAmbienceLoop() {
-        if (soundSystem == null) return;
-
-        boolean playing = isPlaying();
+        boolean playing = isSourcePlaying(AMBIENCE_LOOP_ID);
 
         if (ambienceTargetVolume <= 0.01f) {
             if (playing) {
                 ambienceFadeVolume -= FADE_OUT_SPEED;
                 if (ambienceFadeVolume <= 0.0f) {
                     ambienceFadeVolume = 0.0f;
-                    stopAmbience();
+                    stopSource(AMBIENCE_LOOP_ID);
                 } else {
-                    setAmbienceVolume(calculateFinalVolume());
+                    setSourceVolume(AMBIENCE_LOOP_ID, calculateFinalVolume());
                 }
             }
             return;
@@ -220,10 +165,10 @@ public class UnderWaterSoundsManager extends SoundManager {
                 mc.sndManager.playSoundWithIdAtPos(sound, category,
                     (float) player.x, (float) player.y, (float) player.z,
                     0.001f, 1.0f, AMBIENCE_LOOP_ID);
-                setAmbienceVolume(calculateFinalVolume());
+                setSourceVolume(AMBIENCE_LOOP_ID, calculateFinalVolume());
             }
         } else {
-            setAmbienceVolume(calculateFinalVolume());
+            setSourceVolume(AMBIENCE_LOOP_ID, calculateFinalVolume());
         }
     }
 
@@ -275,15 +220,9 @@ public class UnderWaterSoundsManager extends SoundManager {
         }
 
         SoundCategory category = resolveCategory(SoundCategory.WORLD_SOUNDS);
-        mc.sndManager.playSoundAt(
-            sound,
-            category,
-            (float) player.x,
-            (float) player.y,
-            (float) player.z,
-            volume,
-            1.0f
-        );
+        mc.sndManager.playSoundAt(sound, category,
+            (float) player.x, (float) player.y, (float) player.z,
+            volume, 1.0f);
     }
 
     private static String pickVorbisSoundOrNull(String[] group) {
@@ -383,6 +322,6 @@ public class UnderWaterSoundsManager extends SoundManager {
         ambienceFadeVolume = 0.0f;
         ambienceTargetVolume = 0.0f;
 
-        stopAmbience();
+        stopSource(AMBIENCE_LOOP_ID);
     }
 }

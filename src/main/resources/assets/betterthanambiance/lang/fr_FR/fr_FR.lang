@@ -77,4 +77,6 @@ options.betterthanambiance.noteblockMuffledVolume=Volume pluie bloc musical éto
 options.betterthanambiance.thunderVolume=Volume tonnerre
 options.betterthanambiance.underwaterEnabled=Ambiance sous-marine
 options.betterthanambiance.underwaterVolume=Volume sous-marin
+options.betterthanambiance.overworldEnabled=Ambiance overworld
+options.betterthanambiance.overworldVolume=Volume overworld
 options.betterthanambiance.cricketsVolume=Volume grillons

@@ -269,5 +269,13 @@
   "crickets_2": {
     "subtitle": "subtitles.betterthanambiance.crickets_2",
     "sounds": ["crickets_2.ogg"]
-  }
+  },
+  "birds_screaming": {
+    "subtitle": "subtitles.betterthanambiance.birds_screaming",
+    "sounds": ["birds_screaming.ogg"]
+   },
+   "ocean_waves": {
+    "subtitle": "subtitles.betterthanambiance.ocean_waves",
+    "sounds": ["ocean_waves.ogg"]
+   }
 }

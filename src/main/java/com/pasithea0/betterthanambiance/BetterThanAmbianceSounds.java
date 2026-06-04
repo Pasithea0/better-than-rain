@@ -65,4 +65,7 @@ public class BetterThanAmbianceSounds {
     public static final String UNDERWATER_DARK_2 = MOD_ID + ":underwater_dark_2";
     public static final String UNDERWATER_DARK_3 = MOD_ID + ":underwater_dark_3";
     public static final String UNDERWATER_DARK_4 = MOD_ID + ":underwater_dark_4";
+
+	public static final String BIRDS_LOOP_ID = MOD_ID + ":birds_screaming";
+	public static final String OCEAN_LOOP_ID = MOD_ID + ":ocean_waves";
 }
