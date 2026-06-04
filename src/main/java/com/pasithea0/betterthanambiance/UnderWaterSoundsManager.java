@@ -244,13 +244,12 @@ public class UnderWaterSoundsManager extends SoundManager {
     private int getSurfaceY() {
         int x = (int) Math.floor(player.x);
         int z = (int) Math.floor(player.z);
-        int startY = (int) Math.floor(player.y + 1.62);
-        for (int y = startY; y < world.getHeightBlocks(); y++) {
-            if (!BlockTypeMappings.WATER_BLOCKS.contains(world.getBlockId(x, y, z))) {
-                return y;
+        for (int y = world.getHeightBlocks() - 1; y >= 0; y--) {
+            if (BlockTypeMappings.WATER_BLOCKS.contains(world.getBlockId(x, y, z))) {
+                return y + 1;
             }
         }
-        return world.getHeightBlocks();
+        return (int) Math.floor(player.y + 1.62);
     }
 
     private boolean isPlayerHeadUnderwater() {
