@@ -7,7 +7,6 @@ import net.minecraft.core.sound.SoundCategory;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +17,7 @@ public class UnderWaterSoundsManager extends SoundManager {
     private static final Map<String, Boolean> cachedVorbisAssets = new HashMap<>();
     private static final Map<String, Boolean> cachedVorbisWarnings = new HashMap<>();
 
-    private static Object soundSystemInstance = null;
+    private static Object soundSystem = null;
     private static Method playingMethod = null;
     private static Method stopMethod = null;
     private static Method setVolumeMethod = null;
@@ -27,9 +26,6 @@ public class UnderWaterSoundsManager extends SoundManager {
     private static final float ADDITIONS_CHANCE = 0.70f;
     private static final float RARE_CHANCE = 0.09f;
     private static final float ULTRA_RARE_CHANCE = 0.01f;
-
-    private static final int LOOP_INTERVAL_MIN_TICKS = 360;
-    private static final int LOOP_INTERVAL_MAX_TICKS = 420;
 
     private static final int ADDITIONS_INTERVAL_MIN_TICKS = 80;
     private static final int ADDITIONS_INTERVAL_MAX_TICKS = 140;
@@ -81,12 +77,56 @@ public class UnderWaterSoundsManager extends SoundManager {
     private static final float FADE_OUT_SPEED = 0.02f;
 
     private boolean wasUnderwater = false;
-    private int loopAmbienceCooldownTicks = 0;
     private int additionsCooldownTicks = 0;
     private int rareCooldownTicks = 0;
     private int ultraRareCooldownTicks = 0;
     private float ambienceFadeVolume = 0.0f;
     private float ambienceTargetVolume = 0.0f;
+
+    private static void initSoundSystem() {
+        if (reflectionInitialized) return;
+        reflectionInitialized = true;
+        try {
+            Method getter = SoundEngine.class.getMethod("getSoundSystem");
+            soundSystem = getter.invoke(null);
+            if (soundSystem == null) {
+                BetterThanAmbianceMod.LOGGER.warn("SoundEngine.getSoundSystem() returned null");
+                return;
+            }
+            Class<?> ssClass = soundSystem.getClass();
+            playingMethod = ssClass.getMethod("playing", String.class);
+            stopMethod = ssClass.getMethod("stop", String.class);
+            setVolumeMethod = ssClass.getMethod("setVolume", String.class, float.class);
+            BetterThanAmbianceMod.LOGGER.info("Hooked into SoundSystem via getSoundSystem()");
+        } catch (Exception e) {
+            BetterThanAmbianceMod.LOGGER.warn("Failed to get SoundSystem: {}", e.getMessage());
+        }
+    }
+
+    private static boolean isPlaying() {
+        if (soundSystem == null || playingMethod == null) return false;
+        try {
+            return (Boolean) playingMethod.invoke(soundSystem, AMBIENCE_LOOP_ID);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private static void stopAmbience() {
+        if (soundSystem == null || stopMethod == null) return;
+        try {
+            stopMethod.invoke(soundSystem, AMBIENCE_LOOP_ID);
+        } catch (Exception e) {
+        }
+    }
+
+    private static void setAmbienceVolume(float volume) {
+        if (soundSystem == null || setVolumeMethod == null) return;
+        try {
+            setVolumeMethod.invoke(soundSystem, AMBIENCE_LOOP_ID, volume);
+        } catch (Exception e) {
+        }
+    }
 
     @Override
     protected void onEnterInvalidState() {
@@ -100,7 +140,7 @@ public class UnderWaterSoundsManager extends SoundManager {
             return;
         }
 
-        initReflection(mc.sndManager);
+        initSoundSystem();
 
         boolean underwater = isPlayerHeadUnderwater();
         if (!underwater) {
@@ -112,7 +152,6 @@ public class UnderWaterSoundsManager extends SoundManager {
         }
 
         if (!wasUnderwater) {
-            loopAmbienceCooldownTicks = 0;
             additionsCooldownTicks = randomBetweenInclusive(ADDITIONS_INTERVAL_MIN_TICKS, ADDITIONS_INTERVAL_MAX_TICKS);
             rareCooldownTicks = randomBetweenInclusive(RARE_INTERVAL_MIN_TICKS, RARE_INTERVAL_MAX_TICKS);
             ultraRareCooldownTicks = randomBetweenInclusive(ULTRA_RARE_INTERVAL_MIN_TICKS, ULTRA_RARE_INTERVAL_MAX_TICKS);
@@ -150,71 +189,21 @@ public class UnderWaterSoundsManager extends SoundManager {
         }
     }
 
-    private static void initReflection(SoundEngine snd) {
-        if (reflectionInitialized) return;
-        reflectionInitialized = true;
-        try {
-            Field[] fields = SoundEngine.class.getDeclaredFields();
-            for (Field field : fields) {
-                field.setAccessible(true);
-                Object value = field.get(snd);
-                if (value != null && value.getClass().getName().contains("SoundSystem")) {
-                    soundSystemInstance = value;
-                    Class<?> soundSystemClass = value.getClass();
-
-                    playingMethod = soundSystemClass.getMethod("playing", String.class);
-                    stopMethod = soundSystemClass.getMethod("stop", String.class);
-                    setVolumeMethod = soundSystemClass.getMethod("setVolume", String.class, float.class);
-
-                    BetterThanAmbianceMod.LOGGER.info("Successfully hooked into SoundSystem via reflection");
-                    return;
-                }
-            }
-            BetterThanAmbianceMod.LOGGER.warn("Could not find SoundSystem field in SoundEngine");
-        } catch (Exception e) {
-            BetterThanAmbianceMod.LOGGER.warn("Failed to initialize SoundSystem reflection: {}", e.getMessage());
-        }
-    }
-
-    private static boolean isSoundPlaying() {
-        if (soundSystemInstance == null || playingMethod == null) return false;
-        try {
-            return (Boolean) playingMethod.invoke(soundSystemInstance, AMBIENCE_LOOP_ID);
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    private static void stopSound() {
-        if (soundSystemInstance == null || stopMethod == null) return;
-        try {
-            stopMethod.invoke(soundSystemInstance, AMBIENCE_LOOP_ID);
-        } catch (Exception e) {
-        }
-    }
-
-    private static void setSoundVolume(float volume) {
-        if (soundSystemInstance == null || setVolumeMethod == null) return;
-        try {
-            setVolumeMethod.invoke(soundSystemInstance, AMBIENCE_LOOP_ID, volume);
-        } catch (Exception e) {
-        }
-    }
-
     private void updateAmbienceLoop() {
-        boolean isPlaying = isSoundPlaying();
+        if (soundSystem == null) return;
+
+        boolean playing = isPlaying();
 
         if (ambienceTargetVolume <= 0.01f) {
-            if (isPlaying) {
+            if (playing) {
                 ambienceFadeVolume -= FADE_OUT_SPEED;
                 if (ambienceFadeVolume <= 0.0f) {
                     ambienceFadeVolume = 0.0f;
-                    stopSound();
+                    stopAmbience();
                 } else {
-                    setSoundVolume(calculateFinalVolume());
+                    setAmbienceVolume(calculateFinalVolume());
                 }
             }
-            loopAmbienceCooldownTicks = 0;
             return;
         }
 
@@ -224,22 +213,17 @@ public class UnderWaterSoundsManager extends SoundManager {
             ambienceFadeVolume = Math.max(ambienceFadeVolume - FADE_OUT_SPEED, ambienceTargetVolume);
         }
 
-        if (!isPlaying) {
-            if (loopAmbienceCooldownTicks-- <= 0) {
-                String sound = pickVorbisSoundOrNull(LOOP_AMBIENCE_SOUNDS);
-                if (sound != null) {
-                    if (ambienceFadeVolume > 0.05f) {
-                        mc.sndManager.playSoundWithIdAtPos(sound, SoundCategory.WORLD_SOUNDS,
-                            (float) player.x, (float) player.y, (float) player.z,
-                            0.001f, 1.0f, AMBIENCE_LOOP_ID);
-                        setSoundVolume(calculateFinalVolume());
-                    }
-                }
-                loopAmbienceCooldownTicks = randomBetweenInclusive(LOOP_INTERVAL_MIN_TICKS, LOOP_INTERVAL_MAX_TICKS);
+        if (!playing) {
+            String sound = pickVorbisSoundOrNull(LOOP_AMBIENCE_SOUNDS);
+            if (sound != null && ambienceFadeVolume > 0.05f) {
+                SoundCategory category = resolveCategory(SoundCategory.WORLD_SOUNDS);
+                mc.sndManager.playSoundWithIdAtPos(sound, category,
+                    (float) player.x, (float) player.y, (float) player.z,
+                    0.001f, 1.0f, AMBIENCE_LOOP_ID);
+                setAmbienceVolume(calculateFinalVolume());
             }
         } else {
-            setSoundVolume(calculateFinalVolume());
-            loopAmbienceCooldownTicks = randomBetweenInclusive(LOOP_INTERVAL_MIN_TICKS, LOOP_INTERVAL_MAX_TICKS);
+            setAmbienceVolume(calculateFinalVolume());
         }
     }
 
@@ -290,9 +274,10 @@ public class UnderWaterSoundsManager extends SoundManager {
             return;
         }
 
+        SoundCategory category = resolveCategory(SoundCategory.WORLD_SOUNDS);
         mc.sndManager.playSoundAt(
             sound,
-            SoundCategory.WORLD_SOUNDS,
+            category,
             (float) player.x,
             (float) player.y,
             (float) player.z,
@@ -392,13 +377,12 @@ public class UnderWaterSoundsManager extends SoundManager {
 
     private void reset() {
         wasUnderwater = false;
-        loopAmbienceCooldownTicks = 0;
         additionsCooldownTicks = 0;
         rareCooldownTicks = 0;
         ultraRareCooldownTicks = 0;
         ambienceFadeVolume = 0.0f;
         ambienceTargetVolume = 0.0f;
 
-        stopSound();
+        stopAmbience();
     }
 }

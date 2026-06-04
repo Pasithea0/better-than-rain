@@ -52,17 +52,21 @@ public class ThunderSoundManager extends SoundManager {
     }
 
     private void playRandomThunder(float intensity) {
-        String sound = "ambient.weather.thunder";
+        boolean isClose = RANDOM.nextFloat() < 0.6f;
+        String sound = isClose ? BetterThanAmbianceSounds.THUNDER_CLOSE : BetterThanAmbianceSounds.THUNDER_DISTANT;
 
-        float volume = 0.8f + (intensity * 0.2f);
+        float baseVolume = 0.8f + (intensity * 0.2f);
+        baseVolume *= getFloatValue("betterthanambiance.thunderVolume", 1.0f);
 
         float pitch = 0.9f + RANDOM.nextFloat() * 0.2f;
 
-        mc.sndManager.playSound(
-            sound,
-            SoundCategory.WEATHER_SOUNDS,
-            volume,
-            pitch
-        );
+        SoundCategory category = resolveCategory(SoundCategory.WEATHER_SOUNDS);
+
+        float range = isClose ? 16.0f : 48.0f;
+        float x = (float) player.x + (RANDOM.nextFloat() - 0.5f) * range * 2;
+        float z = (float) player.z + (RANDOM.nextFloat() - 0.5f) * range * 2;
+        float y = (float) player.y;
+
+        mc.sndManager.playSoundAt(sound, category, x, y, z, baseVolume, pitch);
     }
 }

@@ -5,6 +5,7 @@ import net.minecraft.client.option.GameSettings;
 import net.minecraft.client.option.OptionBoolean;
 import net.minecraft.client.option.OptionFloat;
 import net.minecraft.core.entity.player.Player;
+import net.minecraft.core.sound.SoundCategory;
 import net.minecraft.core.world.World;
 
 import java.util.HashMap;
@@ -74,6 +75,15 @@ public abstract class SoundManager {
     protected static int randomBetweenInclusive(int min, int max) {
         if (max <= min) return min;
         return min + RANDOM.nextInt(max - min + 1);
+    }
+
+    protected SoundCategory resolveCategory(SoundCategory defaultCategory) {
+        return isWorldSoundCategory() ? SoundCategory.WORLD_SOUNDS : defaultCategory;
+    }
+
+    protected static float getFloatValue(String name, float fallback) {
+        OptionFloat opt = getFloatOption(name);
+        return opt != null ? opt.value : fallback;
     }
 
     protected static float clamp(float value, float min, float max) {
