@@ -28,7 +28,15 @@ public class BetterThanAmbianceMod implements ModInitializer, RecipeEntrypoint, 
 
     @Override
     public void initNamespaces() {
-        net.minecraft.core.lang.I18n.initialize(MOD_ID);
+        // NOTE: Do NOT call I18n.initialize(MOD_ID) here. initialize(String) REPLACES the global
+        // I18n instance with one built for the given "language code". Since "betterthanambiance" is
+        // not a real language pack id, LanguageSeeker.seek() returns null and the game falls back to
+        // Language.Default (English). HalpLibe's "recipesReady" entrypoint invokes initNamespaces()
+        // on game launch, on server start, AND on every server join (PacketHandlerClient.handleLogin),
+        // so the player's selected language was reset to default at each of those points.
+        // The mod's translations are already wired correctly with no code here: HalpLibe.registerMod()
+        // adds this namespace to Registries.NAMESPACES, and Language.Default.loadNamespace() loads
+        // assets/betterthanambiance/lang/en_US/*.lang from this jar automatically.
     }
 
     @Override
